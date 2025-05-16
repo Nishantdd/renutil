@@ -1,19 +1,22 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { open } from "@tauri-apps/plugin-dialog";
-import { useState } from "react";
 
-export default function FolderInput() {
-  const [folderPath, setFolderPath] = useState("");
-
+export default function FolderInput({
+  folderPath,
+  setFolderPath,
+}: {
+  folderPath: string;
+  setFolderPath: React.Dispatch<React.SetStateAction<string>>;
+}) {
   const handleOpenFolder = async () => {
     try {
       const selectedPath = await open({
         multiple: false,
-        directory: true
+        directory: true,
       });
       setFolderPath(selectedPath || "");
-    } catch(err) {
+    } catch (err) {
       console.log(err);
     }
   };
