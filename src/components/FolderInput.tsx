@@ -15,7 +15,7 @@ export default function FolderInput({
         multiple: false,
         directory: true,
       });
-      setFolderPath(selectedPath || "");
+      if (selectedPath) setFolderPath(selectedPath);
     } catch (err) {
       console.log(err);
     }
