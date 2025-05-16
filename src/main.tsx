@@ -1,5 +1,5 @@
 import ReactDOM from "react-dom/client";
-import { ThemeProvider } from "./components/ui/theme-provider";
+import { ThemeProvider } from "./components/ui/ThemeProvider";
 import "./index.css";
 import App from "./App";
 
