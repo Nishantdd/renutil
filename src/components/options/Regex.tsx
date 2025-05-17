@@ -44,7 +44,7 @@ export default function Regex({
 
   return (
     <Card className="w-full">
-      <CardHeader className="flex flex-row items-center justify-between pb-2">
+      <CardHeader className="flex flex-row flex-wrap items-center justify-between pb-2">
         <CardTitle className="text-lg">Regex</CardTitle>
         <Switch
           checked={isEnabled}
