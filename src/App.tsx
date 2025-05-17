@@ -3,6 +3,7 @@ import FolderInput from "./components/FolderInput";
 import { ThemeToggle } from "./components/ui/ThemeToggle";
 import { Change } from "./types/change.types";
 import DiffVisualizer from "./components/DiffVisualizer";
+import Regex from "./components/options/Regex";
 
 export default function App() {
   const [folderPath, setFolderPath] = useState("");
@@ -12,6 +13,7 @@ export default function App() {
     <div className="flex flex-col items-center justify-center min-h-svh">
       <FolderInput folderPath={folderPath} setFolderPath={setFolderPath}/>
       <DiffVisualizer changes={changes} setChanges={setChanges}/>
+      <Regex changes={changes} setChanges={setChanges} />
       <ThemeToggle />
     </div>
   </>
