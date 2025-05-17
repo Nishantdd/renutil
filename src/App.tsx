@@ -4,14 +4,23 @@ import { Change } from "./types/change.types";
 import DiffVisualizer from "./components/DiffVisualizer";
 import Regex from "./components/options/Regex";
 import Replace from "./components/options/Replace";
+import { invoke } from "@tauri-apps/api/core";
 
 export default function App() {
   const [folderPath, setFolderPath] = useState("");
-  const [changes, setChanges] = useState<Array<Change>>([
-    { old: "old.jpeg", new: "new.jpeg" },
-  ]);
+  const [changes, setChanges] = useState<Array<Change>>([]);
 
   const [advancedOpen, setAdvancedOpen] = useState(false);
+
+  useEffect(() => {
+    const updateDirectory = async () => {
+      const res: Array<Change> = await invoke("get_directory_contents", {
+        dirPath: folderPath,
+      });
+      setChanges(res);
+    };
+    updateDirectory();
+  }, [folderPath]);
 
   useEffect(() => {
     const handleResize = () => {

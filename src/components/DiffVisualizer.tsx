@@ -52,9 +52,15 @@ export default function DiffVisualizer({
     }
   }, [editingIndex]);
 
+  if(!changes.length) {
+    return <div className="min-h-[100%] min-w-[100%] rounded-lg flex items-center justify-center">
+      Please select a directory...
+    </div>
+  }
+  
   return (
     <div className="border rounded-lg overflow-hidden">
-      <div className="max-h-[500px] overflow-auto">
+      <div className="max-h-[100%] overflow-auto">
         <Table>
           <TableHeader className="sticky top-0">
             <TableRow>
