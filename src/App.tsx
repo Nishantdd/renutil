@@ -41,46 +41,41 @@ export default function App() {
         advancedOpen ? "overflow-y-auto" : "overflow-y-hidden"
       }`}
     >
-      <div className="p-8">
-        <div
-          className="grid gap-4"
-          style={{
-            gridTemplateColumns: "20% 1fr",
-            gridTemplateRows: "auto auto auto auto",
-          }}
-        >
-          <div>
-            <FolderInput
-              folderPath={folderPath}
-              setFolderPath={setFolderPath}
-            />
-          </div>
+      <div
+        className="grid gap-4 p-8"
+        style={{
+          gridTemplateColumns: "20% 1fr",
+          gridTemplateRows: "auto auto auto auto",
+        }}
+      >
+        <div>
+          <FolderInput folderPath={folderPath} setFolderPath={setFolderPath} />
+        </div>
 
-          <div className="row-span-3">
-            <DiffVisualizer changes={changes} setChanges={setChanges} />
-          </div>
+        <div className="row-span-3">
+          <DiffVisualizer changes={changes} setChanges={setChanges} />
+        </div>
 
-          <div>
-            <Regex changes={changes} setChanges={setChanges} />
-          </div>
+        <div>
+          <Regex changes={changes} setChanges={setChanges} />
+        </div>
 
-          <div className="row-start-3">
-            <Replace changes={changes} setChanges={setChanges} />
-          </div>
+        <div className="row-start-3">
+          <Replace changes={changes} setChanges={setChanges} />
+        </div>
 
-          <div className="col-span-2 row-start-4">
-            <button
-              className="text-blue-500 hover:underline"
-              onClick={() => setAdvancedOpen((open) => !open)}
-            >
-              Advanced Options &gt;
-            </button>
-            {advancedOpen && (
-              <div className="mt-4 p-4 border rounded-lg">
-                <p>Advanced settings go here.</p>
-              </div>
-            )}
-          </div>
+        <div className="col-span-2 row-start-4">
+          <button
+            className="text-blue-500 hover:underline"
+            onClick={() => setAdvancedOpen((open) => !open)}
+          >
+            Advanced Options &gt;
+          </button>
+          {advancedOpen && (
+            <div className="mt-4 p-4 border rounded-lg">
+              <p>Advanced settings go here.</p>
+            </div>
+          )}
         </div>
       </div>
     </div>
