@@ -1,5 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { open } from "@tauri-apps/plugin-dialog";
 
 export default function FolderInput({
@@ -23,12 +29,23 @@ export default function FolderInput({
 
   return (
     <div className="flex w-full max-w-sm items-center space-x-2">
-      <Input
-        type="text"
-        placeholder="Folder path"
-        value={folderPath}
-        readOnly
-      />
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Input
+              type="text"
+              placeholder="Folder path"
+              value={folderPath}
+              readOnly
+            />
+          </TooltipTrigger>
+          {folderPath && (
+            <TooltipContent>
+              <p>{folderPath}</p>
+            </TooltipContent>
+          )}
+        </Tooltip>
+      </TooltipProvider>
       <Button type="button" onClick={handleOpenFolder}>
         Browse
       </Button>
