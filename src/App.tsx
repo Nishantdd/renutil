@@ -5,12 +5,11 @@ import DiffVisualizer from "./components/DiffVisualizer";
 import Regex from "./components/options/Regex";
 import Replace from "./components/options/Replace";
 import { invoke } from "@tauri-apps/api/core";
+import CollapsibleMenu from "./components/ui/collapsible-content";
 
 export default function App() {
   const [folderPath, setFolderPath] = useState("");
   const [changes, setChanges] = useState<Array<Change>>([]);
-
-  const [advancedOpen, setAdvancedOpen] = useState(false);
 
   useEffect(() => {
     const updateDirectory = async () => {
@@ -22,25 +21,8 @@ export default function App() {
     updateDirectory();
   }, [folderPath]);
 
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 1024) {
-        setAdvancedOpen(true);
-      } else {
-        setAdvancedOpen(false);
-      }
-    };
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, [window.innerWidth]);
-
   return (
-    <div
-      className={`h-screen w-screen overflow-x-hidden ${
-        advancedOpen ? "overflow-y-auto" : "overflow-y-hidden"
-      }`}
-    >
+    <div className={`h-screen w-screen overflow-x-hidden`}>
       <div
         className="grid gap-4 p-8"
         style={{
@@ -65,17 +47,11 @@ export default function App() {
         </div>
 
         <div className="col-span-2 row-start-4">
-          <button
-            className="text-blue-500 hover:underline"
-            onClick={() => setAdvancedOpen((open) => !open)}
-          >
-            Advanced Options &gt;
-          </button>
-          {advancedOpen && (
+          <CollapsibleMenu title="Advanced Settings" className="mt-2">
             <div className="mt-4 p-4 border rounded-lg">
               <p>Advanced settings go here.</p>
             </div>
-          )}
+          </CollapsibleMenu>
         </div>
       </div>
     </div>
