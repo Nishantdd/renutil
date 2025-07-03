@@ -72,8 +72,12 @@ export default function FolderInput({
           </Button>
         </div>
       ) : (
-        <Button type="button" onClick={handleOpenFolder}>
-          Browse
+        <Button
+          type="button"
+          size="icon"
+          onClick={handleOpenFolder}
+        >
+          <FolderOpen />
         </Button>
       )}
     </div>
