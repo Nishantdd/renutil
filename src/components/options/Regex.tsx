@@ -18,7 +18,16 @@ export default function Regex({
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (!isEnabled || !matchPattern || !replacePattern) return;
+    if (!matchPattern || !replacePattern) return;
+
+    if (!isEnabled) {
+      const updatedChanges = changes.map((change) => ({
+        ...change,
+        new: change.old,
+      }));
+      setChanges(updatedChanges);
+      return;
+    }
 
     try {
       new RegExp(matchPattern);

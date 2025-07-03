@@ -25,7 +25,16 @@ export default function Replace({
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (!isEnabled || !replaceText || !withText) return;
+    if (!replaceText || !withText) return;
+
+    if (!isEnabled) {
+      const updatedChanges = changes.map((change) => ({
+        ...change,
+        new: change.old,
+      }));
+      setChanges(updatedChanges);
+      return;
+    }
 
     try {
       const escapedSearch = escapeRegExp(replaceText);
