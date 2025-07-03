@@ -10,6 +10,7 @@ import CollapsibleMenu from "./components/ui/collapsible-content";
 export default function App() {
   const [folderPath, setFolderPath] = useState("");
   const [changes, setChanges] = useState<Array<Change>>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const updateDirectory = async () => {
@@ -22,11 +23,13 @@ export default function App() {
   }, [folderPath]);
   
   const handleSave = async () => {
+    setIsLoading(true);
     const res: Array<Change> = await invoke("save_directory_contents", {
       dirPath: folderPath,
       changes: changes
     });
     setChanges(res);
+    setIsLoading(false);
   }
 
   return (
@@ -39,7 +42,7 @@ export default function App() {
         }}
       >
         <div>
-          <FolderInput folderPath={folderPath} setFolderPath={setFolderPath} handleSave={handleSave}/>
+          <FolderInput folderPath={folderPath} setFolderPath={setFolderPath} handleSave={handleSave} isLoading={isLoading}/>
         </div>
 
         <div className="row-span-3">

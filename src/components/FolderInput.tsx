@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { FolderOpen, Save } from "lucide-react";
+import { FolderOpen, Loader, Save } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -13,10 +13,12 @@ export default function FolderInput({
   folderPath,
   setFolderPath,
   handleSave,
+  isLoading,
 }: {
   folderPath: string;
   setFolderPath: React.Dispatch<React.SetStateAction<string>>;
   handleSave: () => Promise<void>;
+  isLoading: Boolean;
 }) {
   const handleOpenFolder = async () => {
     try {
@@ -66,7 +68,7 @@ export default function FolderInput({
             className="rounded-l-none border-l-0"
             onClick={handleSave}
           >
-            <Save />
+            {isLoading ? <Loader className="animate-spin" /> : <Save />}
           </Button>
         </div>
       ) : (
