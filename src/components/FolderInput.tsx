@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { FolderOpen, Save } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -11,9 +12,11 @@ import { open } from "@tauri-apps/plugin-dialog";
 export default function FolderInput({
   folderPath,
   setFolderPath,
+  handleSave,
 }: {
   folderPath: string;
   setFolderPath: React.Dispatch<React.SetStateAction<string>>;
+  handleSave: () => Promise<void>;
 }) {
   const handleOpenFolder = async () => {
     try {
@@ -46,9 +49,31 @@ export default function FolderInput({
           )}
         </Tooltip>
       </TooltipProvider>
-      <Button type="button" onClick={handleOpenFolder}>
-        Browse
-      </Button>
+      {folderPath ? (
+        <div className="flex items-center">
+          <Button
+            type="button"
+            size="icon"
+            className="rounded-r-none border-r-0"
+            onClick={handleOpenFolder}
+          >
+            <FolderOpen />
+          </Button>
+          <div className="w-px h-[0px] bg-border"></div>
+          <Button
+            type="button"
+            size="icon"
+            className="rounded-l-none border-l-0"
+            onClick={handleSave}
+          >
+            <Save />
+          </Button>
+        </div>
+      ) : (
+        <Button type="button" onClick={handleOpenFolder}>
+          Browse
+        </Button>
+      )}
     </div>
   );
 }
