@@ -20,6 +20,14 @@ export default function App() {
     };
     updateDirectory();
   }, [folderPath]);
+  
+  const handleSave = async () => {
+    const res: Array<Change> = await invoke("save_directory_contents", {
+      dirPath: folderPath,
+      changes: changes
+    });
+    setChanges(res);
+  }
 
   return (
     <div className={`h-screen w-screen overflow-x-hidden`}>
@@ -31,7 +39,7 @@ export default function App() {
         }}
       >
         <div>
-          <FolderInput folderPath={folderPath} setFolderPath={setFolderPath} />
+          <FolderInput folderPath={folderPath} setFolderPath={setFolderPath} handleSave={handleSave}/>
         </div>
 
         <div className="row-span-3">
