@@ -61,7 +61,7 @@ export default function DiffVisualizer({
   }
 
   return (
-    <div className="border rounded-lg relative overflow-auto h-[70vh]">
+    <div className="border rounded-lg relative overflow-auto max-h-[70vh]">
       <Table>
         <TableHeader className="sticky top-0">
           <TableRow>
