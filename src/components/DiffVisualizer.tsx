@@ -52,60 +52,60 @@ export default function DiffVisualizer({
     }
   }, [editingIndex]);
 
-  if(!changes.length) {
-    return <div className="min-h-[100%] min-w-[100%] rounded-lg flex items-center justify-center">
-      Please select a directory...
-    </div>
-  }
-  
-  return (
-    <div className="border rounded-lg overflow-hidden">
-      <div className="max-h-[100%] overflow-auto">
-        <Table>
-          <TableHeader className="sticky top-0">
-            <TableRow>
-              <TableHead className="sticky left-0 z-10 w-[80px] border-r">
-                Sno
-              </TableHead>
-              <TableHead className="sticky left-[80px] z-10 min-w-[200px] border-r">
-                Old name
-              </TableHead>
-              <TableHead className="min-w-[200px]">New name</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {changes.map((change, index) => (
-              <TableRow key={index}>
-                <TableCell className="sticky left-0 font-medium border-r">
-                  {index + 1}
-                </TableCell>
-                <TableCell className="sticky left-[80px] border-r">
-                  {change.old}
-                </TableCell>
-                <TableCell>
-                  {editingIndex === index ? (
-                    <Input
-                      ref={inputRef}
-                      value={editValue}
-                      onChange={(e) => setEditValue(e.target.value)}
-                      onBlur={() => handleNewBlur(index)}
-                      onKeyDown={(e) => handleKeyDown(e, index)}
-                      className="h-8"
-                    />
-                  ) : (
-                    <div
-                      onClick={() => handleNewClick(index, change.new)}
-                      className="min-h-[32px] flex items-center px-3 py-1 cursor-pointer hover:bg-muted/50 rounded"
-                    >
-                      {change.new}
-                    </div>
-                  )}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+  if (!changes.length) {
+    return (
+      <div className="min-h-[100%] min-w-[100%] rounded-lg flex items-center justify-center">
+        Please select a directory...
       </div>
+    );
+  }
+
+  return (
+    <div className="border rounded-lg relative overflow-auto h-[70vh]">
+      <Table>
+        <TableHeader className="sticky top-0">
+          <TableRow>
+            <TableHead className="sticky left-0 z-10 w-[80px] border-r">
+              Sno
+            </TableHead>
+            <TableHead className="sticky left-[80px] z-10 min-w-[200px] border-r">
+              Old name
+            </TableHead>
+            <TableHead className="min-w-[200px]">New name</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {changes.map((change, index) => (
+            <TableRow key={index}>
+              <TableCell className="sticky left-0 font-medium border-r">
+                {index + 1}
+              </TableCell>
+              <TableCell className="sticky left-[80px] border-r">
+                {change.old}
+              </TableCell>
+              <TableCell>
+                {editingIndex === index ? (
+                  <Input
+                    ref={inputRef}
+                    value={editValue}
+                    onChange={(e) => setEditValue(e.target.value)}
+                    onBlur={() => handleNewBlur(index)}
+                    onKeyDown={(e) => handleKeyDown(e, index)}
+                    className="h-8"
+                  />
+                ) : (
+                  <div
+                    onClick={() => handleNewClick(index, change.new)}
+                    className="min-h-[32px] flex items-center px-3 py-1 cursor-pointer hover:bg-muted/50 rounded"
+                  >
+                    {change.new}
+                  </div>
+                )}
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     </div>
   );
 }
