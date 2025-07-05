@@ -6,10 +6,12 @@ import Regex from "./components/options/Regex";
 import Replace from "./components/options/Replace";
 import { invoke } from "@tauri-apps/api/core";
 import CollapsibleMenu from "./components/ui/collapsible-content";
+import Add from "./components/options/Add";
 
 export default function App() {
   const [folderPath, setFolderPath] = useState("");
-  const [changes, setChanges] = useState<Array<Change>>([]);
+  const [primaryChanges, setPrimaryChanges] = useState<Array<Change>>([]);
+  const [secondaryChanges, setSecondaryChanges] = useState<Array<Change>>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -17,18 +19,20 @@ export default function App() {
       const res: Array<Change> = await invoke("get_directory_contents", {
         dirPath: folderPath,
       });
-      setChanges(res);
+      setPrimaryChanges(res);
     };
     updateDirectory();
   }, [folderPath]);
+  
+  useEffect(() => setSecondaryChanges(primaryChanges), [primaryChanges])
   
   const handleSave = async () => {
     setIsLoading(true);
     const res: Array<Change> = await invoke("save_directory_contents", {
       dirPath: folderPath,
-      changes: changes
+      changes: secondaryChanges
     });
-    setChanges(res);
+    setPrimaryChanges(res);
     setIsLoading(false);
   }
 
@@ -46,15 +50,15 @@ export default function App() {
         </div>
 
         <div className="row-span-3">
-          <DiffVisualizer changes={changes} setChanges={setChanges} />
+          <DiffVisualizer changes={secondaryChanges} setChanges={setSecondaryChanges} />
         </div>
 
         <div>
-          <Regex changes={changes} setChanges={setChanges} />
+          <Regex changes={primaryChanges} setChanges={setPrimaryChanges} />
         </div>
 
         <div className="row-start-3">
-          <Replace changes={changes} setChanges={setChanges} />
+          <Replace changes={primaryChanges} setChanges={setPrimaryChanges} />
         </div>
 
         <div className="col-span-2 row-start-4">
