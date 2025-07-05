@@ -64,7 +64,7 @@ export default function App() {
         <div className="col-span-2 row-start-4">
           <CollapsibleMenu title="Advanced Settings" className="mt-2">
             <div className="mt-4 p-4 border rounded-lg">
-              <Add primaryChanges={primaryChanges} secondaryChanges={secondaryChanges} setSecondaryChanges={setSecondaryChanges} />
+              <Add primaryChanges={primaryChanges} setSecondaryChanges={setSecondaryChanges} />
             </div>
           </CollapsibleMenu>
         </div>

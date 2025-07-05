@@ -7,11 +7,9 @@ import { useState, useEffect } from "react";
 
 export default function Add({
   primaryChanges,
-  secondaryChanges,
   setSecondaryChanges,
 }: {
   primaryChanges: Array<Change>;
-  secondaryChanges: Array<Change>;
   setSecondaryChanges: React.Dispatch<React.SetStateAction<Change[]>>;
 }) {
   const [isEnabled, setIsEnabled] = useState(true);
@@ -19,20 +17,22 @@ export default function Add({
   const [suffixText, setSuffixText] = useState("");
 
   useEffect(() => {
-    if (!prefixText && !suffixText) return;
-
-    if (!isEnabled) {
-      setSecondaryChanges(primaryChanges);
-      return;
-    }
-
-    const updatedChanges = primaryChanges.map((change) => ({
-      ...change,
-      new: `${prefixText}${change.new}${suffixText}`,
-    }));
-
-    setSecondaryChanges(updatedChanges);
-  }, [isEnabled, prefixText, suffixText]);
+    setTimeout(() => {
+      if (!prefixText && !suffixText) return;
+  
+      if (!isEnabled) {
+        setSecondaryChanges(primaryChanges);
+        return;
+      }
+  
+      const updatedChanges = primaryChanges.map((change) => ({
+        ...change,
+        new: `${prefixText}${change.new}${suffixText}`,
+      }));
+  
+      setSecondaryChanges(updatedChanges);
+    })
+  }, [isEnabled, prefixText, suffixText, primaryChanges]);
 
   return (
     <Card className="w-full">
