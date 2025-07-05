@@ -30,13 +30,13 @@ export default function Regex({
     }
 
     try {
-      new RegExp(matchPattern);
+      const matchPatternRegex = new RegExp(matchPattern, "g");
       setError("");
 
       const updatedChanges = changes.map((change) => {
         try {
           const newValue = change.old.replace(
-            new RegExp(matchPattern, "g"),
+            matchPatternRegex,
             replacePattern,
           );
           return { ...change, new: newValue };
