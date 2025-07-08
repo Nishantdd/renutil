@@ -8,6 +8,7 @@ import { invoke } from "@tauri-apps/api/core";
 import CollapsibleMenu from "./components/ui/collapsible-content";
 import Add from "./components/options/Add";
 import Remove from "./components/options/Remove";
+import Numbering from "./components/options/Numbering";
 
 export default function App() {
   const [folderPath, setFolderPath] = useState("");
@@ -64,9 +65,15 @@ export default function App() {
 
         <div className="col-span-2 row-start-4">
           <CollapsibleMenu title="Advanced Settings" className="mt-2">
-            <div className="mt-4 p-4 border rounded-lg flex">
-              <Add primaryChanges={primaryChanges} setSecondaryChanges={setSecondaryChanges} />
-              <Remove primaryChanges={primaryChanges} setSecondaryChanges={setSecondaryChanges} />
+            <div className="mt-4 p-4 border rounded-lg flex gap-3">
+              <div className="flex flex-col gap-3">
+                <Add primaryChanges={primaryChanges} setSecondaryChanges={setSecondaryChanges} />
+                <Numbering primaryChanges={primaryChanges} setSecondaryChanges={setSecondaryChanges} />
+              </div>
+              <div className="flex flex-col gap-3 w-[100%]">
+                <Remove primaryChanges={primaryChanges} setSecondaryChanges={setSecondaryChanges} />
+                <div>Additional tools here</div>
+              </div>
             </div>
           </CollapsibleMenu>
         </div>
