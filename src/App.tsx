@@ -7,6 +7,7 @@ import Replace from "./components/options/Replace";
 import { invoke } from "@tauri-apps/api/core";
 import CollapsibleMenu from "./components/ui/collapsible-content";
 import Add from "./components/options/Add";
+import Remove from "./components/options/Remove";
 
 export default function App() {
   const [folderPath, setFolderPath] = useState("");
@@ -63,8 +64,9 @@ export default function App() {
 
         <div className="col-span-2 row-start-4">
           <CollapsibleMenu title="Advanced Settings" className="mt-2">
-            <div className="mt-4 p-4 border rounded-lg">
+            <div className="mt-4 p-4 border rounded-lg flex">
               <Add primaryChanges={primaryChanges} setSecondaryChanges={setSecondaryChanges} />
+              <Remove primaryChanges={primaryChanges} setSecondaryChanges={setSecondaryChanges} />
             </div>
           </CollapsibleMenu>
         </div>
