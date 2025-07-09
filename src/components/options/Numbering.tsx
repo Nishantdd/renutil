@@ -108,7 +108,7 @@ export default function Numbering({
         />
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="flex flex-row gap-4">
+        <div className="flex flex-row gap-4 mb-8">
           <div className="flex-1 space-y-2">
             <Label htmlFor="mode">Mode</Label>
             <Select value={mode} onValueChange={(val) => setMode(val)}>

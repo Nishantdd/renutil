@@ -9,9 +9,12 @@ import CollapsibleMenu from "./components/ui/collapsible-content";
 import Add from "./components/options/Add";
 import Remove from "./components/options/Remove";
 import Numbering from "./components/options/Numbering";
+import MoveCopy from "./components/options/MoveCopy";
 
 export default function App() {
   const [folderPath, setFolderPath] = useState("");
+  const [copyMovePath, setCopyMovePath] = useState("");
+  const [copyMoveType, setCopyMoveType] = useState("");
   const [primaryChanges, setPrimaryChanges] = useState<Array<Change>>([]);
   const [secondaryChanges, setSecondaryChanges] = useState<Array<Change>>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -72,7 +75,7 @@ export default function App() {
               </div>
               <div className="flex flex-col gap-3 w-[100%]">
                 <Remove primaryChanges={primaryChanges} setSecondaryChanges={setSecondaryChanges} />
-                <div>Additional tools here</div>
+                <MoveCopy copyMovePath={copyMovePath} copyMoveType={copyMoveType} setCopyMovePath={setCopyMovePath} setCopyMoveType={setCopyMoveType} />
               </div>
             </div>
           </CollapsibleMenu>
