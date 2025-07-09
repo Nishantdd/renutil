@@ -33,12 +33,32 @@ export default function App() {
   
   const handleSave = async () => {
     setIsLoading(true);
-    const res: Array<Change> = await invoke("save_directory_contents", {
-      dirPath: folderPath,
-      changes: secondaryChanges
-    });
-    setPrimaryChanges(res);
-    setIsLoading(false);
+    try {
+      const res: Array<Change> = await invoke("save_directory_contents", {
+        dirPath: folderPath,
+        changes: secondaryChanges
+      });
+      
+      if(copyMoveType === "copy") {
+        await invoke("copy_directory_contents", {
+          oldDirPath: folderPath,
+          newDirPath: copyMovePath
+        });
+        setPrimaryChanges(res);
+      } else if (copyMoveType === "move") {
+        await invoke("move_directory_contents", {
+          oldDirPath: folderPath,
+          newDirPath: copyMovePath
+        });
+        setFolderPath(copyMovePath);
+      } else {
+        setPrimaryChanges(res);
+      }
+    } catch(err) {
+      console.error("Error occured during call: ", err);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (

@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-use std::{fs::{read_dir, rename}, path::Path};
+use std::{fs::{read_dir, rename, copy, create_dir_all}, path::Path};
 
 #[derive(Serialize, Deserialize)]
 struct Content {
@@ -75,11 +75,129 @@ fn save_directory_contents(dir_path: &str, changes: Vec<Content>) -> Result<Vec<
     }
 }
 
+#[tauri::command]
+fn copy_directory_contents(old_dir_path: &str, new_dir_path: &str) {
+    let old_path = Path::new(old_dir_path);
+    let new_path = Path::new(new_dir_path);
+
+    if !old_path.exists() || !old_path.is_dir() {
+        eprintln!("Source path '{}' does not exist or is not a directory.", old_dir_path);
+        return;
+    }
+
+    if !new_path.exists() {
+        if let Err(e) = create_dir_all(&new_path) {
+            eprintln!("Failed to create destination directory '{}': {}", new_dir_path, e);
+            return;
+        }
+    }
+
+    let entries = match read_dir(&old_path) {
+        Ok(entries) => entries,
+        Err(e) => {
+            eprintln!("Failed to read source directory '{}': {}", old_dir_path, e);
+            return;
+        }
+    };
+
+    for entry_res in entries {
+        let entry = match entry_res {
+            Ok(entry) => entry,
+            Err(e) => {
+                eprintln!("Failed to read directory entry: {}", e);
+                continue;
+            }
+        };
+
+        let metadata = match entry.metadata() {
+            Ok(meta) => meta,
+            Err(e) => {
+                eprintln!("Failed to get metadata for entry '{:?}': {}", entry.path(), e);
+                continue;
+            }
+        };
+
+        if metadata.is_file() {
+            let file_name = entry.file_name();
+            let old_file_path = old_path.join(&file_name);
+            let new_file_path = new_path.join(&file_name);
+
+            if let Err(e) = copy(&old_file_path, &new_file_path) {
+                eprintln!(
+                    "Failed to copy '{}' to '{}': {}",
+                    old_file_path.display(),
+                    new_file_path.display(),
+                    e
+                );
+            }
+        }
+    }
+}
+
+#[tauri::command]
+fn move_directory_contents(old_dir_path: &str, new_dir_path: &str) {
+    let old_path = Path::new(old_dir_path);
+    let new_path = Path::new(new_dir_path);
+
+    if !old_path.exists() || !old_path.is_dir() {
+        eprintln!("Source path '{}' does not exist or is not a directory.", old_dir_path);
+        return;
+    }
+
+    if !new_path.exists() {
+        if let Err(e) = create_dir_all(&new_path) {
+            eprintln!("Failed to create destination directory '{}': {}", new_dir_path, e);
+            return;
+        }
+    }
+
+    let entries = match read_dir(&old_path) {
+        Ok(entries) => entries,
+        Err(e) => {
+            eprintln!("Failed to read source directory '{}': {}", old_dir_path, e);
+            return;
+        }
+    };
+
+    for entry_res in entries {
+        let entry = match entry_res {
+            Ok(entry) => entry,
+            Err(e) => {
+                eprintln!("Failed to read directory entry: {}", e);
+                continue;
+            }
+        };
+
+        let metadata = match entry.metadata() {
+            Ok(meta) => meta,
+            Err(e) => {
+                eprintln!("Failed to get metadata for entry '{:?}': {}", entry.path(), e);
+                continue;
+            }
+        };
+
+        if metadata.is_file() {
+            let file_name = entry.file_name();
+            let old_file_path = old_path.join(&file_name);
+            let new_file_path = new_path.join(&file_name);
+
+            if let Err(e) = rename(&old_file_path, &new_file_path) {
+                eprintln!(
+                    "Failed to move '{}' to '{}': {}",
+                    old_file_path.display(),
+                    new_file_path.display(),
+                    e
+                );
+            }
+        }
+    }
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_dialog::init())
-        .invoke_handler(tauri::generate_handler![get_directory_contents, save_directory_contents])
+        .invoke_handler(tauri::generate_handler![get_directory_contents, save_directory_contents, copy_directory_contents, move_directory_contents])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
