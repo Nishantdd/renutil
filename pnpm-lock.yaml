@@ -53,6 +53,9 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
+      immer:
+        specifier: ^11.0.1
+        version: 11.0.1
       lucide-react:
         specifier: ^0.511.0
         version: 0.511.0(react@19.1.0)
@@ -70,7 +73,7 @@ importers:
         version: 4.1.7
       zustand:
         specifier: ^5.0.9
-        version: 5.0.9(@types/react@19.1.4)(react@19.1.0)
+        version: 5.0.9(@types/react@19.1.4)(immer@11.0.1)(react@19.1.0)
     devDependencies:
       '@tauri-apps/cli':
         specifier: ^2.5.0
@@ -1272,6 +1275,9 @@ packages:
 
   graceful-fs@4.2.11:
     resolution: {integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==}
+
+  immer@11.0.1:
+    resolution: {integrity: sha512-naDCyggtcBWANtIrjQEajhhBEuL9b0Zg4zmlWK2CzS6xCWSE39/vvf4LqnMjUAWHBhot4m9MHCM/Z+mfWhUkiA==}
 
   jiti@2.4.2:
     resolution: {integrity: sha512-rg9zJN+G4n2nfJl5MW3BMygZX56zKPNVEYYqq7adpmMh4Jn2QNEwhvQlFy6jPVdcod7txZtKHWnyZiA3a0zP7A==}
@@ -2629,6 +2635,8 @@ snapshots:
 
   graceful-fs@4.2.11: {}
 
+  immer@11.0.1: {}
+
   jiti@2.4.2: {}
 
   js-tokens@4.0.0: {}
@@ -2853,7 +2861,8 @@ snapshots:
 
   yallist@5.0.0: {}
 
-  zustand@5.0.9(@types/react@19.1.4)(react@19.1.0):
+  zustand@5.0.9(@types/react@19.1.4)(immer@11.0.1)(react@19.1.0):
     optionalDependencies:
       '@types/react': 19.1.4
+      immer: 11.0.1
       react: 19.1.0
