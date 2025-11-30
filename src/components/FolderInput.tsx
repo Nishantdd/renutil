@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { FolderOpen, Loader, Save } from "lucide-react";
+import { FolderOpen } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -8,38 +8,46 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { open } from "@tauri-apps/plugin-dialog";
+import { useState } from "react";
+import { useRenameStore } from "@/store/renameStore";
+import { invoke } from "@tauri-apps/api/core";
 
-export default function FolderInput({
-  folderPath,
-  setFolderPath,
-  handleSave,
-  isLoading,
-}: {
-  folderPath: string;
-  setFolderPath: React.Dispatch<React.SetStateAction<string>>;
-  handleSave: () => Promise<void>;
-  isLoading: Boolean;
-}) {
+export default function FolderInput() {
+  const [folderPath, setFolderPath] = useState("");
+  const [loading, setLoading] = useState(false);
+  const setOriginalFiles = useRenameStore((s) => s.setOriginalFiles);
+
   const handleOpenFolder = async () => {
+    setLoading(true);
     try {
       const selectedPath = await open({
         multiple: false,
         directory: true,
       });
-      if (selectedPath) setFolderPath(selectedPath);
+
+      if (selectedPath) {
+        setFolderPath(selectedPath);
+        const res: Array<string> = await invoke("get_directory_contents", {
+          dirPath: selectedPath,
+        });
+        setOriginalFiles(res);
+      }
     } catch (err) {
       console.log(err);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="flex w-full max-w-sm items-center space-x-2">
+    <div className="flex w-full items-center">
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
             <Input
               type="text"
               placeholder="Folder path"
+              className="border-none"
               value={folderPath}
               readOnly
             />
@@ -51,35 +59,15 @@ export default function FolderInput({
           )}
         </Tooltip>
       </TooltipProvider>
-      {folderPath ? (
-        <div className="flex items-center">
-          <Button
-            type="button"
-            size="icon"
-            className="rounded-r-none border-r-0"
-            onClick={handleOpenFolder}
-          >
-            <FolderOpen />
-          </Button>
-          <div className="w-px h-[0px] bg-border"></div>
-          <Button
-            type="button"
-            size="icon"
-            className="rounded-l-none border-l-0"
-            onClick={handleSave}
-          >
-            {isLoading ? <Loader className="animate-spin" /> : <Save />}
-          </Button>
-        </div>
-      ) : (
-        <Button
-          type="button"
-          size="icon"
-          onClick={handleOpenFolder}
-        >
-          <FolderOpen />
-        </Button>
-      )}
+      <Button
+        type="button"
+        size="icon"
+        variant="ghost"
+        disabled={loading}
+        onClick={handleOpenFolder}
+      >
+        <FolderOpen />
+      </Button>
     </div>
   );
 }

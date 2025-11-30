@@ -8,7 +8,7 @@ struct Content {
 }
 
 #[tauri::command]
-fn get_directory_contents(dir_path: &str) -> Result<Vec<Content>, String> {
+fn get_directory_contents(dir_path: &str) -> Result<Vec<String>, String> {
     let path = Path::new(dir_path);
 
     if !path.exists() {
@@ -26,21 +26,17 @@ fn get_directory_contents(dir_path: &str) -> Result<Vec<Content>, String> {
                         .file_name()
                         .into_string()
                         .ok()
-                        .map(|file_name| Content {
-                            old: file_name.clone(),
-                            new: file_name,
-                        })
                 }
                 _ => None,
             })
         })
-        .collect::<Vec<Content>>();
+        .collect::<Vec<String>>();
 
     Ok(entries)
 }
 
 #[tauri::command]
-fn save_directory_contents(dir_path: &str, changes: Vec<Content>) -> Result<Vec<Content>, String> {
+fn save_directory_contents(dir_path: &str, changes: Vec<Content>) -> Result<Vec<String>, String> {
     let path = Path::new(dir_path);
     
     if !path.exists() {
