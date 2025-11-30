@@ -1,104 +1,124 @@
-import { useState, useEffect } from "react";
-import FolderInput from "./components/FolderInput";
-import { Change } from "./types/change.types";
-import DiffVisualizer from "./components/DiffVisualizer";
-import Regex from "./components/options/Regex";
-import Replace from "./components/options/Replace";
-import { invoke } from "@tauri-apps/api/core";
-import CollapsibleMenu from "./components/ui/collapsible-content";
+import { useEffect } from "react";
 import Add from "./components/options/Add";
-import Remove from "./components/options/Remove";
-import Numbering from "./components/options/Numbering";
-import MoveCopy from "./components/options/MoveCopy";
+import { useRenameStore } from "./store/renameStore";
+import { useShallow } from "zustand/react/shallow";
+import {
+  createAddAction,
+  createRegexAction,
+  createRemoveAction,
+} from "./lib/factories";
+
+const demoOriginals = [
+  "01 - Summer.jpg",
+  "02 - Winter.png",
+  "03 - Autumn.jpeg",
+  "notes.txt",
+  "readme.md",
+];
 
 export default function App() {
-  const [folderPath, setFolderPath] = useState("");
-  const [copyMovePath, setCopyMovePath] = useState("");
-  const [copyMoveType, setCopyMoveType] = useState("");
-  const [primaryChanges, setPrimaryChanges] = useState<Array<Change>>([]);
-  const [secondaryChanges, setSecondaryChanges] = useState<Array<Change>>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const {
+    originalFiles,
+    setOriginalFiles,
+    actions,
+    addAction,
+    removeActionById,
+    getResults,
+  } = useRenameStore(
+    useShallow((s) => ({
+      originalFiles: s.originalFiles,
+      setOriginalFiles: s.setOriginalFiles,
+      actions: s.actions,
+      addAction: s.addAction,
+      removeActionById: s.removeActionById,
+      getResults: s.getResults,
+    })),
+  );
 
   useEffect(() => {
-    const updateDirectory = async () => {
-      const res: Array<Change> = await invoke("get_directory_contents", {
-        dirPath: folderPath,
-      });
-      setPrimaryChanges(res);
-    };
-    updateDirectory();
-  }, [folderPath]);
-  
-  useEffect(() => setSecondaryChanges(primaryChanges), [primaryChanges])
-  
-  const handleSave = async () => {
-    setIsLoading(true);
-    try {
-      const res: Array<Change> = await invoke("save_directory_contents", {
-        dirPath: folderPath,
-        changes: secondaryChanges
-      });
-      
-      if(copyMoveType === "copy") {
-        await invoke("copy_directory_contents", {
-          oldDirPath: folderPath,
-          newDirPath: copyMovePath
-        });
-        setPrimaryChanges(res);
-      } else if (copyMoveType === "move") {
-        await invoke("move_directory_contents", {
-          oldDirPath: folderPath,
-          newDirPath: copyMovePath
-        });
-        setFolderPath(copyMovePath);
-      } else {
-        setPrimaryChanges(res);
-      }
-    } catch(err) {
-      console.error("Error occured during call: ", err);
-    } finally {
-      setIsLoading(false);
-    }
-  }
+    setOriginalFiles(demoOriginals);
+  }, []);
+
+  const results = getResults();
 
   return (
-    <div className={`h-screen w-screen overflow-x-hidden`}>
-      <div
-        className="grid gap-4 p-8"
-        style={{
-          gridTemplateColumns: "20% 1fr",
-          gridTemplateRows: "auto auto auto auto",
-        }}
-      >
-        <div>
-          <FolderInput folderPath={folderPath} setFolderPath={setFolderPath} handleSave={handleSave} isLoading={isLoading}/>
-        </div>
+    <div className="grid grid-cols-1 grid-rows-4 sm:grid-cols-[1fr_3fr] sm:grid-rows-[auto_1fr] h-screen w-screen">
+      <div className="flex bg-secondary items-center justify-center border-b sm:border-r border-border p-4">
+        <div>Open File dialog</div>
+      </div>
+      <div className="flex bg-secondary items-center justify-center border-b border-border p-4">
+        <div>Action buttons</div>
+      </div>
+      <div className="flex bg-card items-center justify-center border-b sm:border-b-0 sm:border-r border-border">
+        <Add primaryChanges={[]} setSecondaryChanges={() => {}} />
+        <div>Add rename actions</div>
+      </div>
+      <div className="flex items-center justify-center">
+        {/* <div>Diff view</div> */}
+        <div
+          style={{ padding: 24, fontFamily: "Inter, system-ui, sans-serif" }}
+        >
+          <h1>Rename Pipeline — Demo</h1>
 
-        <div className="row-span-3">
-          <DiffVisualizer changes={secondaryChanges} setChanges={setSecondaryChanges} />
-        </div>
+          <section style={{ marginBottom: 18 }}>
+            <h2>Original files</h2>
+            <ol>
+              {originalFiles.map((f) => (
+                <li key={f}>{f}</li>
+              ))}
+            </ol>
+          </section>
 
-        <div>
-          <Regex changes={primaryChanges} setChanges={setPrimaryChanges} />
-        </div>
+          <section style={{ marginBottom: 18 }}>
+            <h2>Actions</h2>
+            <div style={{ display: "flex", gap: 8, marginBottom: 8 }}>
+              <button
+                onClick={() => addAction(createAddAction("NEW_", "_v1"))}
+                title="Add prefix NEW_ and suffix _v1"
+              >
+                Add prefix/suffix
+              </button>
 
-        <div className="row-start-3">
-          <Replace changes={primaryChanges} setChanges={setPrimaryChanges} />
-        </div>
+              <button
+                onClick={() => addAction(createRemoveAction(" - ", "first"))}
+                title='Remove first occurrence of " - "'
+              >
+                Remove first " - "
+              </button>
 
-        <div className="col-span-2 row-start-4">
-          <CollapsibleMenu title="Advanced Settings" className="mt-2">
-            <div className="mt-4 p-4 border rounded-lg flex gap-3">
-              <div className="flex flex-col gap-3">
-                <Add primaryChanges={primaryChanges} setSecondaryChanges={setSecondaryChanges} />
-                <Numbering primaryChanges={primaryChanges} setSecondaryChanges={setSecondaryChanges} />
-              </div>
-              <div className="flex flex-col gap-3 w-[100%]">
-                <Remove primaryChanges={primaryChanges} setSecondaryChanges={setSecondaryChanges} />
-                <MoveCopy copyMovePath={copyMovePath} copyMoveType={copyMoveType} setCopyMovePath={setCopyMovePath} setCopyMoveType={setCopyMoveType} />
-              </div>
+              <button
+                onClick={() =>
+                  addAction(createRegexAction("^\\d+\\s*-\\s*", "", ""))
+                }
+                title="Remove leading numbers and dash like '01 - '"
+              >
+                Strip leading numbering (regex)
+              </button>
             </div>
-          </CollapsibleMenu>
+
+            <ul>
+              {actions.map((a, idx) => (
+                <li key={a.id} style={{ marginBottom: 6 }}>
+                  <strong>{idx + 1}.</strong> {a.name ?? a.type}{" "}
+                  <button
+                    onClick={() => removeActionById(a.id)}
+                    style={{ marginLeft: 8 }}
+                  >
+                    Remove
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          <section>
+            <h2>Preview (result after applying actions)</h2>
+            <ol>
+              {results.map((r, i) => (
+                <li key={r + "_" + i}>{r}</li>
+              ))}
+            </ol>
+          </section>
         </div>
       </div>
     </div>
