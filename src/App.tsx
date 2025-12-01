@@ -5,6 +5,7 @@ import { Button } from "./components/ui/button";
 import { Plus } from "lucide-react";
 import { Kbd, KbdGroup } from "./components/ui/kbd";
 import { type } from "@tauri-apps/plugin-os";
+import { ThemeToggle } from "./components/ui/ThemeToggle";
 
 export default function App() {
   const osType = type();
@@ -14,17 +15,17 @@ export default function App() {
       <div className="bg-secondary border-b sm:border-r border-border">
         <FolderInput />
       </div>
-      <div className="flex bg-secondary items-center justify-center border-b border-border">
-        <div>Action buttons</div>
+      <div className="flex bg-secondary items-center justify-end border-b border-border">
+        <ThemeToggle />
       </div>
       <div className="flex flex-col bg-card border-b sm:border-b-0 sm:border-r border-border">
         <Button
           type="button"
           size="icon"
           variant="ghost"
-          className="border-b w-full flex flex-wrap justify-between"
+          className="border-b w-full flex flex-wrap justify-between h-10"
         >
-          <div className="flex gap-2 ml-2">
+          <div className="flex justify-center items-center gap-2 ml-2">
             <Plus />
             Add rename actions
           </div>
