@@ -20,7 +20,7 @@ export const ACTION_TRANSFORMS: {
 
     if (mode === "custom_position") {
       const { start_pos, end_pos } = action.params;
-      if (start_pos >= end_pos || start_pos < 1) return name;
+      if (start_pos > end_pos || start_pos < 1) return name;
 
       const startIndex = start_pos - 1;
       const endIndex = end_pos;
