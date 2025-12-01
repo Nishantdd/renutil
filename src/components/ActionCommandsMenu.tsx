@@ -1,10 +1,5 @@
-import * as React from "react";
-import {
-  Plus,
-  Minus,
-  Regex,
-  Asterisk,
-} from "lucide-react";
+import { useEffect, useState } from "react";
+import { Plus, Minus, Regex, Asterisk } from "lucide-react";
 
 import {
   CommandDialog,
@@ -16,24 +11,15 @@ import {
   CommandSeparator,
 } from "@/components/ui/command";
 import { Button } from "@/components/ui/button";
+import { Kbd, KbdGroup } from "@/components/ui/kbd";
 
 import { type } from "@tauri-apps/plugin-os";
 
-const Kbd = ({ children }: { children: React.ReactNode }) => (
-  <span className="bg-muted text-muted-foreground ml-1 inline-flex h-5 items-center rounded border px-1.5 font-mono text-[10px] font-medium opacity-100">
-    {children}
-  </span>
-);
-
-const KbdGroup = ({ children }: { children: React.ReactNode }) => (
-  <div className="flex items-center gap-1">{children}</div>
-);
-
 export function ActionCommandMenu() {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const osType = type();
 
-  React.useEffect(() => {
+  useEffect(() => {
     const down = (e: KeyboardEvent) => {
       if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
@@ -71,8 +57,8 @@ export function ActionCommandMenu() {
         {(osType === "windows" || osType === "linux") && (
           <div className="flex mr-2">
             <KbdGroup>
-              <Kbd>Ctrl</Kbd>
-              <Kbd>K</Kbd>
+              <Kbd className="font-mono">Ctrl</Kbd>
+              <Kbd className="font-mono">K</Kbd>
             </KbdGroup>
           </div>
         )}
