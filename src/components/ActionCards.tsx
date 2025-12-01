@@ -9,8 +9,8 @@ export default function ActionCards() {
   return (
     <div className="w-full">
       {actions.map((action) => (
-        <Card key={action.id} className="border-none shadow-none border-b p-4">
-          <CardHeader className="flex flex-row items-center justify-between p-0 mb-2">
+        <Card key={action.id} className="border-0 border-b shadow-none p-4">
+          <CardHeader className="flex flex-row items-center justify-between p-0">
             <CardTitle className="text-base font-medium capitalize">
               {action.type} action
             </CardTitle>
@@ -35,7 +35,7 @@ export default function ActionCards() {
             {action.type === "remove" && (
               <div>
                 <p>Text: {action.params.text}</p>
-                {action.params.mode && <p>Mode: {action.params.mode}</p>}
+                <p>Mode: {action.params.mode}</p>
               </div>
             )}
 
