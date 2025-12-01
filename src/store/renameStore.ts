@@ -38,7 +38,7 @@ export const useRenameStore = create<RenameState>((set, get) => {
     setOriginalFiles: (files) =>
       set(() => {
         const cache = createCacheWithOrigin(files);
-        return { originalFiles: files.slice(), cache };
+        return { originalFiles: files.slice(), cache, actions: [] };
       }),
 
     addAction: (action) =>
