@@ -1,4 +1,5 @@
 import { RenameAction } from "@/types/action.types";
+import { applyCountableRemoval } from "./utils";
 
 /**
  * Pure transformers: each takes a filename and an action, returns new filename.
@@ -30,78 +31,51 @@ export const ACTION_TRANSFORMS: {
     return name.slice(0, position) + text + name.slice(position);
   },
 
-  remove: (name, action) => {
-    const { mode } = action.params;
+  removeDigits: (name, action) => {
+    const pattern = /\d/g;
+    const { firstN, lastN } = action.params;
+    return applyCountableRemoval(name, pattern, firstN, lastN);
+  },
 
-    if (mode === "custom_position") {
-      const { startPos, endPos } = action.params;
-      if (startPos > endPos || startPos < 1) return name;
+  removeLowercase: (name, action) => {
+    const pattern = /[a-z]/g;
+    const { firstN, lastN } = action.params;
+    return applyCountableRemoval(name, pattern, firstN, lastN);
+  },
 
-      const startIndex = startPos - 1;
-      const endIndex = endPos;
+  removeUppercase: (name, action) => {
+    const pattern = /[A-Z]/g;
+    const { firstN, lastN } = action.params;
+    return applyCountableRemoval(name, pattern, firstN, lastN);
+  },
 
-      return name.slice(0, startIndex) + name.slice(endIndex);
-    }
+  removeLetters: (name, action) => {
+    const pattern = /[a-zA-Z]/g;
+    const { firstN, lastN } = action.params;
+    return applyCountableRemoval(name, pattern, firstN, lastN);
+  },
 
-    let pattern: RegExp;
+  removeSymbols: (name, action) => {
+    const pattern = /[^a-zA-Z0-9\s]/g;
+    const { firstN, lastN } = action.params;
+    return applyCountableRemoval(name, pattern, firstN, lastN);
+  },
 
-    switch (mode) {
-      case "digits":
-        pattern = /\d/g;
-        break;
-      case "lowercase":
-        pattern = /[a-z]/g;
-        break;
-      case "uppercase":
-        pattern = /[A-Z]/g;
-        break;
-      case "letters":
-        pattern = /[a-zA-Z]/g;
-        break;
-      case "symbols":
-        pattern = /[^a-zA-Z0-9\s]/g;
-        break;
-      case "custom_characters":
-        const { customChar } = action.params;
-        if (!customChar) return name;
-        const escaped = customChar.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-        pattern = new RegExp(escaped, "g");
-        break;
-      default:
-        return name;
-    }
+  removeCustomCharacters: (name, action) => {
+    const { customChar, firstN, lastN } = action.params;
+    if (!customChar) return name;
 
-    const firstN = action.params.firstN || 0;
-    const lastN = action.params.lastN || 0;
+    // Escape special regex characters in the custom string for safe RegExp creation
+    const escaped = customChar.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const pattern = new RegExp(escaped, "g");
 
-    if (firstN === 0 && lastN === 0) {
-      return name.replace(pattern, "");
-    }
+    return applyCountableRemoval(name, pattern, firstN, lastN);
+  },
 
-    const matches = [...name.matchAll(pattern)];
-    const totalMatches = matches.length;
-    const occurrencesToRemove = new Set<number>();
-
-    for (let i = 0; i < firstN; i++) {
-      if (i < totalMatches) occurrencesToRemove.add(i);
-    }
-
-    for (let i = 0; i < lastN; i++) {
-      const targetIndex = totalMatches - 1 - i;
-      if (targetIndex >= 0) occurrencesToRemove.add(targetIndex);
-    }
-
-    const cuts = matches
-      .filter((_, index) => occurrencesToRemove.has(index))
-      .map((m) => ({ start: m.index!, end: m.index! + m[0].length }))
-      .sort((a, b) => b.start - a.start);
-
-    let result = name;
-    for (const { start, end } of cuts) {
-      result = result.slice(0, start) + result.slice(end);
-    }
-
-    return result;
+  removeAtPosition: (name, action) => {
+    const { startPos, endPos } = action.params;
+    if (startPos > endPos || startPos < 1) return name;
+    return name.slice(0, startPos - 1) + name.slice(endPos);
   },
 
   replace: (name, action) => {

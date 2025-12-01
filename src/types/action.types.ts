@@ -2,7 +2,13 @@ export type ActionType =
   | "addPrefix"
   | "addSuffix"
   | "addAtPosition"
-  | "remove"
+  | "removeDigits"
+  | "removeLowercase"
+  | "removeUppercase"
+  | "removeLetters"
+  | "removeSymbols"
+  | "removeCustomCharacters"
+  | "removeAtPosition"
   | "replace"
   | "regex";
 
@@ -41,46 +47,66 @@ export interface AddAtPositionAction extends BaseAction {
 }
 
 // Remove action types
-export type ModeType =
-  | "digits"
-  | "lowercase"
-  | "uppercase"
-  | "letters"
-  | "symbols"
-  | "custom_characters"
-  | "custom_position";
-
-type CountableMode =
-  | "digits"
-  | "lowercase"
-  | "uppercase"
-  | "letters"
-  | "symbols";
-
-interface CountableParams {
-  mode: CountableMode;
+export interface CountableRemovalParams {
   firstN?: number;
   lastN?: number;
 }
 
-interface CustomCharParams {
-  mode: "custom_characters";
-  customChar: string;
-  firstN?: number;
-  lastN?: number;
+export interface RemoveDigitsAction extends BaseAction {
+  type: "removeDigits";
+  displayName: "Remove Digits";
+  params: CountableRemovalParams;
 }
 
-interface PositionParams {
-  mode: "custom_position";
-  startPos: number;
-  endPos: number;
+export interface RemoveLowercaseAction extends BaseAction {
+  type: "removeLowercase";
+  displayName: "Remove Lowercase Letters";
+  params: CountableRemovalParams;
 }
 
-export interface RemoveAction extends BaseAction {
-  type: "remove";
-  displayName: "Remove";
-  params: CountableParams | CustomCharParams | PositionParams;
+export interface RemoveUppercaseAction extends BaseAction {
+  type: "removeUppercase";
+  displayName: "Remove Uppercase Letters";
+  params: CountableRemovalParams;
 }
+
+export interface RemoveLettersAction extends BaseAction {
+  type: "removeLetters";
+  displayName: "Remove All Letters";
+  params: CountableRemovalParams;
+}
+
+export interface RemoveSymbolsAction extends BaseAction {
+  type: "removeSymbols";
+  displayName: "Remove Symbols";
+  params: CountableRemovalParams;
+}
+
+export interface RemoveCustomCharactersAction extends BaseAction {
+  type: "removeCustomCharacters";
+  displayName: "Remove Custom Characters";
+  params: {
+    customChar: string;
+    firstN?: number;
+    lastN?: number;
+  };
+}
+
+export interface RemoveAtPositionAction extends BaseAction {
+  type: "removeAtPosition";
+  displayName: "Remove At Position";
+  params: {
+    startPos: number;
+    endPos: number;
+  };
+}
+
+export type CountableActionType =
+  | "removeDigits"
+  | "removeLowercase"
+  | "removeUppercase"
+  | "removeLetters"
+  | "removeSymbols";
 
 // Replace action types
 export interface ReplaceAction extends BaseAction {
@@ -109,6 +135,12 @@ export type RenameAction =
   | AddPrefixAction
   | AddSuffixAction
   | AddAtPositionAction
-  | RemoveAction
+  | RemoveDigitsAction
+  | RemoveLowercaseAction
+  | RemoveUppercaseAction
+  | RemoveLettersAction
+  | RemoveSymbolsAction
+  | RemoveCustomCharactersAction
+  | RemoveAtPositionAction
   | ReplaceAction
   | RegexAction;

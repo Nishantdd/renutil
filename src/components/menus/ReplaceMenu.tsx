@@ -32,8 +32,8 @@ export default function ReplaceMenu({
       createReplaceAction(
         toReplace,
         replaceWith,
-        parseInt(firstN) || 0,
-        parseInt(lastN) || 0,
+        Number.parseInt(firstN) || 0,
+        Number.parseInt(lastN) || 0,
       ),
     );
     

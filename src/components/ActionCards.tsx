@@ -61,53 +61,74 @@ export default function ActionCards() {
                 </div>
               )}
 
-              {action.type === "remove" && (
+              {(action.type === "removeDigits" ||
+                action.type === "removeLowercase" ||
+                action.type === "removeUppercase" ||
+                action.type === "removeLetters" ||
+                action.type === "removeSymbols") && (
                 <div className="text-sm space-y-1">
                   <p>
-                    <span className="text-muted-foreground">Mode: </span>
-                    {action.params.mode}
+                    <span className="text-muted-foreground">Target: </span>
+                    {action.displayName.replace("Remove ", "")}
                   </p>
-
-                  {action.params.mode === "custom_position" ? (
-                    <p>
-                      <span className="text-muted-foreground">Range: </span>
-                      {action.params.startPos} - {action.params.endPos}
+                  {!action.params.firstN && !action.params.lastN ? (
+                    <p className="text-muted-foreground">
+                      Removes all occurrences
                     </p>
                   ) : (
-                    <>
-                      {action.params.mode === "custom_characters" && (
+                    <div className="flex gap-3">
+                      {!!action.params.firstN && (
                         <p>
-                          <span className="text-muted-foreground">Text:</span> "
-                          {action.params.customChar}"
+                          <span className="text-muted-foreground">First: </span>
+                          {action.params.firstN}
                         </p>
                       )}
-
-                      {!action.params.firstN && !action.params.lastN ? (
-                        <p className="text-muted-foreground">
-                          Removes all occurrences
+                      {!!action.params.lastN && (
+                        <p>
+                          <span className="text-muted-foreground">Last: </span>
+                          {action.params.lastN}
                         </p>
-                      ) : (
-                        <div className="flex gap-3">
-                          {!!action.params.firstN && (
-                            <p>
-                              <span className="text-muted-foreground">
-                                First:{" "}
-                              </span>
-                              {action.params.firstN}
-                            </p>
-                          )}
-                          {!!action.params.lastN && (
-                            <p>
-                              <span className="text-muted-foreground">
-                                Last:{" "}
-                              </span>
-                              {action.params.lastN}
-                            </p>
-                          )}
-                        </div>
                       )}
-                    </>
+                    </div>
                   )}
+                </div>
+              )}
+
+              {action.type === "removeCustomCharacters" && (
+                <div className="text-sm space-y-1">
+                  <p>
+                    <span className="text-muted-foreground">Text: </span>"
+                    {action.params.customChar}"
+                  </p>
+                  {!action.params.firstN && !action.params.lastN ? (
+                    <p className="text-muted-foreground">
+                      Removes all occurrences
+                    </p>
+                  ) : (
+                    <div className="flex gap-3">
+                      {!!action.params.firstN && (
+                        <p>
+                          <span className="text-muted-foreground">First: </span>
+                          {action.params.firstN}
+                        </p>
+                      )}
+                      {!!action.params.lastN && (
+                        <p>
+                          <span className="text-muted-foreground">Last: </span>
+                          {action.params.lastN}
+                        </p>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {action.type === "removeAtPosition" && (
+                <div className="text-sm space-y-1">
+                  <p>
+                    <span className="text-muted-foreground">Range: </span>
+                    {action.params.startPos} - {action.params.endPos}
+                  </p>
                 </div>
               )}
 

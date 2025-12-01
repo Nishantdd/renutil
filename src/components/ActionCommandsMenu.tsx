@@ -17,10 +17,12 @@ import { type } from "@tauri-apps/plugin-os";
 import { useShallow } from "zustand/react/shallow";
 import { useCommandStore } from "@/store/commandStore";
 import AddPrefixMenu from "./menus/AddPrefixMenu";
-import RemoveMenu from "./menus/RemoveMenu";
 import ReplaceMenu from "./menus/ReplaceMenu";
 import AddSuffixMenu from "./menus/AddSuffixMenu";
 import AddAtPositionMenu from "./menus/AddAtPositionMenu";
+import CountableRemoveMenu from "./menus/CountableRemoveMenu";
+import RemoveAtPositionMenu from "./menus/RemoveAtPositionMenu";
+import RemoveCustomCharactersMenu from "./menus/RemoveCustomCharacterMenu";
 
 export function ActionCommandMenu() {
   const { open, setOpen, page, setPage } = useCommandStore(
@@ -117,11 +119,59 @@ export function ActionCommandMenu() {
                 </CommandItem>
                 <CommandItem
                   onSelect={() => {
-                    setPage("remove");
+                    setPage("removeDigits");
                   }}
                 >
                   <Minus className="mr-2 h-4 w-4" />
-                  <span>Remove</span>
+                  <span>Remove digits</span>
+                </CommandItem>
+                <CommandItem
+                  onSelect={() => {
+                    setPage("removeLowercase");
+                  }}
+                >
+                  <Minus className="mr-2 h-4 w-4" />
+                  <span>Remove lowercase</span>
+                </CommandItem>
+                <CommandItem
+                  onSelect={() => {
+                    setPage("removeUppercase");
+                  }}
+                >
+                  <Minus className="mr-2 h-4 w-4" />
+                  <span>Remove uppercase</span>
+                </CommandItem>
+                <CommandItem
+                  onSelect={() => {
+                    setPage("removeLetters");
+                  }}
+                >
+                  <Minus className="mr-2 h-4 w-4" />
+                  <span>Remove letters</span>
+                </CommandItem>
+                <CommandItem
+                  onSelect={() => {
+                    setPage("removeSymbols");
+                  }}
+                >
+                  <Minus className="mr-2 h-4 w-4" />
+                  <span>Remove symbols</span>
+                </CommandItem>
+                <CommandItem
+                  onSelect={() => {
+                    setPage("removeAtPosition");
+                  }}
+                >
+                  <Minus className="mr-2 h-4 w-4" />
+                  <span>Remove at position</span>
+                </CommandItem>
+                <CommandItem
+                  onSelect={() => {
+                    setPage("removeCustomCharacters");
+                  }}
+                >
+                  <Minus className="mr-2 h-4 w-4" />
+                  <span>Remove custom characters</span>
                 </CommandItem>
                 <CommandItem
                   onSelect={() => {
@@ -156,12 +206,48 @@ export function ActionCommandMenu() {
         {page === "addAtPosition" && (
           <AddAtPositionMenu handleOpenChange={handleOpenChange} />
         )}
-        {page === "remove" && (
-          <RemoveMenu handleOpenChange={handleOpenChange} />
+
+        {page === "removeAtPosition" && (
+          <RemoveAtPositionMenu handleOpenChange={handleOpenChange} />
         )}
+        {page === "removeCustomCharacters" && (
+          <RemoveCustomCharactersMenu handleOpenChange={handleOpenChange} />
+        )}
+        {page === "removeDigits" && (
+          <CountableRemoveMenu
+            actionType="removeDigits"
+            handleOpenChange={handleOpenChange}
+          />
+        )}
+        {page === "removeLowercase" && (
+          <CountableRemoveMenu
+            actionType="removeLowercase"
+            handleOpenChange={handleOpenChange}
+          />
+        )}
+        {page === "removeUppercase" && (
+          <CountableRemoveMenu
+            actionType="removeUppercase"
+            handleOpenChange={handleOpenChange}
+          />
+        )}
+        {page === "removeLetters" && (
+          <CountableRemoveMenu
+            actionType="removeLetters"
+            handleOpenChange={handleOpenChange}
+          />
+        )}
+        {page === "removeSymbols" && (
+          <CountableRemoveMenu
+            actionType="removeSymbols"
+            handleOpenChange={handleOpenChange}
+          />
+        )}
+
         {page === "replace" && (
           <ReplaceMenu handleOpenChange={handleOpenChange} />
         )}
+
         {page === "regex" && <></>}
       </CommandDialog>
     </>

@@ -1,4 +1,4 @@
-import { RemoveAction, RenameAction } from "@/types/action.types";
+import { RenameAction, CountableRemovalParams } from "@/types/action.types.ts";
 
 export const uid = (prefix = "") =>
   prefix + Math.random().toString(36).slice(2, 9);
@@ -39,23 +39,121 @@ export function createAddAtPositionAction(
   };
 }
 
-export function createRemoveAction(
-  params: RemoveAction["params"],
+export function createRemoveDigitsAction(
+  params: CountableRemovalParams = {},
 ): RenameAction {
-  let name = `Remove ${params.mode}`;
-  if (params.mode === "custom_characters") {
-    name = `Remove "${params.customChar}"`;
-  } else if (params.mode === "custom_position") {
-    name = `Remove range ${params.startPos}-${params.endPos}`;
-  }
+  let name = `Remove Digits`;
+  if (params.firstN) name += ` (First ${params.firstN})`;
+  if (params.lastN) name += ` (Last ${params.lastN})`;
 
   return {
     id: uid("act_"),
-    type: "remove",
-    displayName: "Remove",
+    type: "removeDigits",
+    displayName: "Remove Digits",
     name,
     createdAt: Date.now(),
     params,
+  };
+}
+
+export function createRemoveLowercaseAction(
+  params: CountableRemovalParams = {},
+): RenameAction {
+  let name = `Remove Lowercase Letters`;
+  if (params.firstN) name += ` (First ${params.firstN})`;
+  if (params.lastN) name += ` (Last ${params.lastN})`;
+
+  return {
+    id: uid("act_"),
+    type: "removeLowercase",
+    displayName: "Remove Lowercase Letters",
+    name,
+    createdAt: Date.now(),
+    params,
+  };
+}
+
+export function createRemoveUppercaseAction(
+  params: CountableRemovalParams = {},
+): RenameAction {
+  let name = `Remove Uppercase Letters`;
+  if (params.firstN) name += ` (First ${params.firstN})`;
+  if (params.lastN) name += ` (Last ${params.lastN})`;
+
+  return {
+    id: uid("act_"),
+    type: "removeUppercase",
+    displayName: "Remove Uppercase Letters",
+    name,
+    createdAt: Date.now(),
+    params,
+  };
+}
+
+export function createRemoveLettersAction(
+  params: CountableRemovalParams = {},
+): RenameAction {
+  let name = `Remove All Letters`;
+  if (params.firstN) name += ` (First ${params.firstN})`;
+  if (params.lastN) name += ` (Last ${params.lastN})`;
+
+  return {
+    id: uid("act_"),
+    type: "removeLetters",
+    displayName: "Remove All Letters",
+    name,
+    createdAt: Date.now(),
+    params,
+  };
+}
+
+export function createRemoveSymbolsAction(
+  params: CountableRemovalParams = {},
+): RenameAction {
+  let name = `Remove Symbols`;
+  if (params.firstN) name += ` (First ${params.firstN})`;
+  if (params.lastN) name += ` (Last ${params.lastN})`;
+
+  return {
+    id: uid("act_"),
+    type: "removeSymbols",
+    displayName: "Remove Symbols",
+    name,
+    createdAt: Date.now(),
+    params,
+  };
+}
+
+export function createRemoveCustomCharactersAction(
+  customChar = "",
+  firstN?: number,
+  lastN?: number,
+): RenameAction {
+  let name = `Remove custom char "${customChar}"`;
+
+  return {
+    id: uid("act_"),
+    type: "removeCustomCharacters",
+    displayName: "Remove Custom Characters",
+    name,
+    createdAt: Date.now(),
+    params: { customChar, firstN, lastN },
+  };
+}
+
+export function createRemoveAtPositionAction(
+  startPos = 1,
+  endPos = 1,
+): RenameAction {
+  const name = `Remove range ${startPos}-${endPos}`;
+
+  return {
+    id: uid("act_"),
+    type: "removeAtPosition",
+    displayName: "Remove At Position",
+    name,
+    createdAt: Date.now(),
+    params: { startPos, endPos },
   };
 }
 
