@@ -5,6 +5,7 @@ import { useRenameStore } from "@/store/renameStore";
 
 export default function ActionCards() {
   const actions = useRenameStore((s) => s.actions);
+  const removeActionById = useRenameStore((s) => s.removeActionById);
 
   return (
     <div className="w-full">
@@ -21,7 +22,7 @@ export default function ActionCards() {
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={() => console.log("action removed", action.id)}
+                onClick={() => removeActionById(action.id)}
                 className="h-6 w-6 p-0"
               >
                 <X className="h-4 w-4" />
