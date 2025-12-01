@@ -1,4 +1,3 @@
-import Add from "./components/options/Add";
 import FolderInput from "./components/FolderInput";
 import DiffVisualizer from "./components/DiffVisualizer";
 import { ThemeToggle } from "./components/ui/ThemeToggle";

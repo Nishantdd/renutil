@@ -53,37 +53,37 @@ export default function ActionCards() {
                   {action.params.mode === "custom_position" ? (
                     <p>
                       <span className="text-muted-foreground">Range: </span>
-                      {action.params.start_pos} - {action.params.end_pos}
+                      {action.params.startPos} - {action.params.endPos}
                     </p>
                   ) : (
                     <>
                       {action.params.mode === "custom_characters" && (
                         <p>
                           <span className="text-muted-foreground">Text:</span> "
-                          {action.params.custom_char}"
+                          {action.params.customChar}"
                         </p>
                       )}
 
-                      {!action.params.first_n && !action.params.last_n ? (
+                      {!action.params.firstN && !action.params.lastN ? (
                         <p className="text-muted-foreground">
                           Removes all occurrences
                         </p>
                       ) : (
                         <div className="flex gap-3">
-                          {!!action.params.first_n && (
+                          {!!action.params.firstN && (
                             <p>
                               <span className="text-muted-foreground">
                                 First:{" "}
                               </span>
-                              {action.params.first_n}
+                              {action.params.firstN}
                             </p>
                           )}
-                          {!!action.params.last_n && (
+                          {!!action.params.lastN && (
                             <p>
                               <span className="text-muted-foreground">
                                 Last:{" "}
                               </span>
-                              {action.params.last_n}
+                              {action.params.lastN}
                             </p>
                           )}
                         </div>
@@ -92,7 +92,22 @@ export default function ActionCards() {
                   )}
                 </div>
               )}
-              
+
+              {action.type === "replace" && (
+                <div>
+                  <p>
+                    <span className="text-muted-foreground">To replace: </span>
+                    {action.params.toReplace}
+                  </p>
+                  <p>
+                    <span className="text-muted-foreground">
+                      Replace with:{" "}
+                    </span>
+                    {action.params.replaceWith}
+                  </p>
+                </div>
+              )}
+
               {action.type === "regex" && (
                 <div>
                   <p>Pattern: {action.params.pattern}</p>

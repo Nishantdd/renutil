@@ -42,16 +42,16 @@ export default function RemoveMenu({
       const start = parseInt(startPos);
       const end = parseInt(endPos);
       if (isNaN(start) || isNaN(end)) return;
-      params.start_pos = start;
-      params.end_pos = end;
+      params.startPos = start;
+      params.endPos = end;
     } else if (mode === "custom_characters") {
       if (!customChar) return;
-      params.custom_char = customChar;
-      params.first_n = parseInt(firstN) || 0;
-      params.last_n = parseInt(lastN) || 0;
+      params.customChar = customChar;
+      params.firstN = parseInt(firstN) || 0;
+      params.lastN = parseInt(lastN) || 0;
     } else {
-      params.first_n = parseInt(firstN) || 0;
-      params.last_n = parseInt(lastN) || 0;
+      params.firstN = parseInt(firstN) || 0;
+      params.lastN = parseInt(lastN) || 0;
     }
 
     addAction(createRemoveAction(params));

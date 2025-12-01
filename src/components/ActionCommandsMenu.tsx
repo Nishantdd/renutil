@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Plus, Minus, Regex, Asterisk } from "lucide-react"; // Added ArrowLeft
+import { Plus, Minus, Regex, Asterisk, Replace } from "lucide-react"; // Added ArrowLeft
 
 import {
   CommandDialog,
@@ -18,6 +18,7 @@ import { useShallow } from "zustand/react/shallow";
 import { useCommandStore } from "@/store/commandStore";
 import AddMenu from "./menus/AddMenu";
 import RemoveMenu from "./menus/RemoveMenu";
+import ReplaceMenu from "./menus/ReplaceMenu";
 
 export function ActionCommandMenu() {
   const { open, setOpen, page, setPage } = useCommandStore(
@@ -106,15 +107,19 @@ export function ActionCommandMenu() {
                 </CommandItem>
                 <CommandItem
                   onSelect={() => {
-                    setPage("regex");
+                    setPage("replace");
                   }}
                 >
-                  <Regex className="mr-2 h-4 w-4" />
-                  <span>Regex</span>
+                  <Replace className="mr-2 h-4 w-4" />
+                  <span>Replace</span>
                 </CommandItem>
               </CommandGroup>
               <CommandSeparator />
               <CommandGroup heading="Advanced">
+                <CommandItem>
+                  <Regex className="mr-2 h-4 w-4" />
+                  <span>Regex</span>
+                </CommandItem>
                 <CommandItem>
                   <Asterisk className="mr-2 h-4 w-4" />
                   <span>Numbering</span>
@@ -127,6 +132,9 @@ export function ActionCommandMenu() {
         {page === "add" && <AddMenu handleOpenChange={handleOpenChange} />}
         {page === "remove" && (
           <RemoveMenu handleOpenChange={handleOpenChange} />
+        )}
+        {page === "replace" && (
+          <ReplaceMenu handleOpenChange={handleOpenChange} />
         )}
         {page === "regex" && <></>}
       </CommandDialog>

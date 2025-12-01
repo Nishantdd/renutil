@@ -15,15 +15,15 @@ export const ACTION_TRANSFORMS: {
     return `${prefix}${name}${suffix}`;
   },
 
-  remove: (name: string, action) => {
+  remove: (name, action) => {
     const { mode } = action.params;
 
     if (mode === "custom_position") {
-      const { start_pos, end_pos } = action.params;
-      if (start_pos > end_pos || start_pos < 1) return name;
+      const { startPos, endPos } = action.params;
+      if (startPos > endPos || startPos < 1) return name;
 
-      const startIndex = start_pos - 1;
-      const endIndex = end_pos;
+      const startIndex = startPos - 1;
+      const endIndex = endPos;
 
       return name.slice(0, startIndex) + name.slice(endIndex);
     }
@@ -47,19 +47,19 @@ export const ACTION_TRANSFORMS: {
         pattern = /[^a-zA-Z0-9\s]/g;
         break;
       case "custom_characters":
-        const { custom_char } = action.params;
-        if (!custom_char) return name;
-        const escaped = custom_char.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        const { customChar } = action.params;
+        if (!customChar) return name;
+        const escaped = customChar.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
         pattern = new RegExp(escaped, "g");
         break;
       default:
         return name;
     }
 
-    const first_n = action.params.first_n || 0;
-    const last_n = action.params.last_n || 0;
+    const firstN = action.params.firstN || 0;
+    const lastN = action.params.lastN || 0;
 
-    if (first_n === 0 && last_n === 0) {
+    if (firstN === 0 && lastN === 0) {
       return name.replace(pattern, "");
     }
 
@@ -67,11 +67,11 @@ export const ACTION_TRANSFORMS: {
     const totalMatches = matches.length;
     const occurrencesToRemove = new Set<number>();
 
-    for (let i = 0; i < first_n; i++) {
+    for (let i = 0; i < firstN; i++) {
       if (i < totalMatches) occurrencesToRemove.add(i);
     }
 
-    for (let i = 0; i < last_n; i++) {
+    for (let i = 0; i < lastN; i++) {
       const targetIndex = totalMatches - 1 - i;
       if (targetIndex >= 0) occurrencesToRemove.add(targetIndex);
     }
@@ -89,6 +89,44 @@ export const ACTION_TRANSFORMS: {
     return result;
   },
 
+  replace: (name, action) => {
+    const { replaceWith, toReplace, firstN = 0, lastN = 0 } = action.params;
+    if (!toReplace) return name;
+
+    const escaped = toReplace.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const pattern = new RegExp(escaped, "g");
+
+    if (firstN === 0 && lastN === 0) {
+      return name.replace(pattern, replaceWith);
+    }
+
+    const matches = [...name.matchAll(pattern)];
+    const totalMatches = matches.length;
+    const indicesToReplace = new Set<number>();
+
+    for (let i = 0; i < firstN; i++) {
+      if (i < totalMatches) indicesToReplace.add(i);
+    }
+
+    for (let i = 0; i < lastN; i++) {
+      const targetIndex = totalMatches - 1 - i;
+      if (targetIndex >= 0) indicesToReplace.add(targetIndex);
+    }
+
+    const targets = matches
+      .filter((_, idx) => indicesToReplace.has(idx))
+      .sort((a, b) => b.index! - a.index!);
+
+    let result = name;
+    for (const match of targets) {
+      const start = match.index!;
+      const end = start + match[0].length;
+      result = result.slice(0, start) + replaceWith + result.slice(end);
+    }
+
+    return result;
+  },
+  
   regex: (name, action) => {
     const { pattern, flags = "", replacement = "" } = action.params;
     if (!pattern) return name;

@@ -18,9 +18,9 @@ export function createRemoveAction(
 ): RenameAction {
   let name = `Remove ${params.mode}`;
   if (params.mode === "custom_characters") {
-    name = `Remove "${params.custom_char}"`;
+    name = `Remove "${params.customChar}"`;
   } else if (params.mode === "custom_position") {
-    name = `Remove range ${params.start_pos}-${params.end_pos}`;
+    name = `Remove range ${params.startPos}-${params.endPos}`;
   }
 
   return {
@@ -29,6 +29,21 @@ export function createRemoveAction(
     name,
     createdAt: Date.now(),
     params,
+  };
+}
+
+export function createReplaceAction(
+  toReplace: string,
+  replaceWith: string,
+  firstN?: number,
+  lastN?: number,
+): RenameAction {
+  return {
+    id: uid("act_"),
+    type: "replace",
+    name: `Replace ${toReplace} with ${replaceWith}`,
+    createdAt: Date.now(),
+    params: { toReplace, replaceWith, firstN, lastN },
   };
 }
 

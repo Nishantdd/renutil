@@ -1,4 +1,4 @@
-export type ActionType = "add" | "remove" | "regex";
+export type ActionType = "add" | "remove" | "replace" | "regex";
 
 export interface BaseAction {
   id: string;
@@ -25,7 +25,7 @@ export type ModeType =
   | "symbols"
   | "custom_characters"
   | "custom_position";
-  
+
 type CountableMode =
   | "digits"
   | "lowercase"
@@ -35,26 +35,37 @@ type CountableMode =
 
 interface CountableParams {
   mode: CountableMode;
-  first_n?: number;
-  last_n?: number;
+  firstN?: number;
+  lastN?: number;
 }
 
 interface CustomCharParams {
   mode: "custom_characters";
-  custom_char: string;
-  first_n?: number;
-  last_n?: number;
+  customChar: string;
+  firstN?: number;
+  lastN?: number;
 }
 
 interface PositionParams {
   mode: "custom_position";
-  start_pos: number;
-  end_pos: number;
+  startPos: number;
+  endPos: number;
 }
 
 export interface RemoveAction extends BaseAction {
   type: "remove";
   params: CountableParams | CustomCharParams | PositionParams;
+}
+
+// Replace action types
+export interface ReplaceAction extends BaseAction {
+  type: "replace";
+  params: {
+    toReplace: string;
+    replaceWith: string;
+    firstN?: number;
+    lastN?: number;
+  };
 }
 
 // Regex action types
@@ -67,4 +78,8 @@ export interface RegexAction extends BaseAction {
   };
 }
 
-export type RenameAction = AddAction | RemoveAction | RegexAction;
+export type RenameAction =
+  | AddAction
+  | RemoveAction
+  | ReplaceAction
+  | RegexAction;
