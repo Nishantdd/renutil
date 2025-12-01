@@ -15,15 +15,78 @@ export const ACTION_TRANSFORMS: {
     return `${prefix}${name}${suffix}`;
   },
 
-  remove: (name, action) => {
-    const { text, mode = "all" } = action.params;
-    if (!text) return name;
-    if (mode === "first") {
-      const i = name.indexOf(text);
-      return i === -1 ? name : name.slice(0, i) + name.slice(i + text.length);
+  remove: (name: string, action) => {
+    const { mode } = action.params;
+
+    if (mode === "custom_position") {
+      const { start_pos, end_pos } = action.params;
+      if (start_pos >= end_pos || start_pos < 1) return name;
+
+      const startIndex = start_pos - 1;
+      const endIndex = end_pos;
+
+      return name.slice(0, startIndex) + name.slice(endIndex);
     }
-    // mode === "all"
-    return name.split(text).join("");
+
+    let pattern: RegExp;
+
+    switch (mode) {
+      case "digits":
+        pattern = /\d/g;
+        break;
+      case "lowercase":
+        pattern = /[a-z]/g;
+        break;
+      case "uppercase":
+        pattern = /[A-Z]/g;
+        break;
+      case "letters":
+        pattern = /[a-zA-Z]/g;
+        break;
+      case "symbols":
+        pattern = /[^a-zA-Z0-9\s]/g;
+        break;
+      case "custom_characters":
+        const { custom_char } = action.params;
+        if (!custom_char) return name;
+        const escaped = custom_char.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        pattern = new RegExp(escaped, "g");
+        break;
+      default:
+        return name;
+    }
+
+    const first_n = action.params.first_n || 0;
+    const last_n = action.params.last_n || 0;
+
+    if (first_n === 0 && last_n === 0) {
+      return name.replace(pattern, "");
+    }
+
+    const matches = [...name.matchAll(pattern)];
+    const totalMatches = matches.length;
+    const occurrencesToRemove = new Set<number>();
+
+    for (let i = 0; i < first_n; i++) {
+      if (i < totalMatches) occurrencesToRemove.add(i);
+    }
+
+    for (let i = 0; i < last_n; i++) {
+      const targetIndex = totalMatches - 1 - i;
+      if (targetIndex >= 0) occurrencesToRemove.add(targetIndex);
+    }
+
+    const cuts = matches
+      .filter((_, index) => occurrencesToRemove.has(index))
+      .map((m) => ({ start: m.index!, end: m.index! + m[0].length }))
+      .sort((a, b) => b.start - a.start);
+
+    let result = name;
+    for (const { start, end } of cuts) {
+      result = result.slice(0, start) + result.slice(end);
+    }
+
+    return result;
   },
 
   regex: (name, action) => {
