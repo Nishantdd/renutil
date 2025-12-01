@@ -9,9 +9,12 @@ import {
 import { useRenameStore } from "@/store/renameStore";
 
 export default function DiffVisualizer() {
-  const getResults = useRenameStore((s) => s.getResults);
   const oldFilenames = useRenameStore((s) => s.originalFiles);
-  const newFilenames = getResults();
+  const newFilenames = useRenameStore((s) => {
+    const lastIndex = s.actions.length - 1;
+    if (lastIndex < 0) return s.cache.get(-1) ?? s.originalFiles;
+    return s.cache.get(lastIndex) ?? s.originalFiles;
+  });
 
   if (!oldFilenames.length) {
     return (
