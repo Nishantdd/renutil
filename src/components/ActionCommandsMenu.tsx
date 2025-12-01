@@ -17,6 +17,7 @@ import { type } from "@tauri-apps/plugin-os";
 import { useShallow } from "zustand/react/shallow";
 import { useCommandStore } from "@/store/commandStore";
 import AddMenu from "./menus/AddMenu";
+import RemoveMenu from "./menus/RemoveMenu";
 
 export function ActionCommandMenu() {
   const { open, setOpen, page, setPage } = useCommandStore(
@@ -124,7 +125,9 @@ export function ActionCommandMenu() {
         )}
 
         {page === "add" && <AddMenu handleOpenChange={handleOpenChange} />}
-        {page === "remove" && <></>}
+        {page === "remove" && (
+          <RemoveMenu handleOpenChange={handleOpenChange} />
+        )}
         {page === "regex" && <></>}
       </CommandDialog>
     </>
