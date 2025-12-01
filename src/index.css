@@ -119,6 +119,9 @@
 @layer base {
     * {
         @apply border-border outline-ring/50;
+        -webkit-user-select: none; /* Safari */
+        -ms-user-select: none; /* IE 10 and IE 11 */
+        user-select: none; /* Standard syntax */
     }
     :root {
         font-family:
