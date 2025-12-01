@@ -35,7 +35,7 @@ export default function Add({
   }, [isEnabled, prefixText, suffixText, primaryChanges]);
 
   return (
-    <Card className="w-full">
+    <Card className="w-full border-none shadow-none">
       <CardHeader className="flex flex-row flex-wrap items-center justify-between pb-2">
         <CardTitle className="text-lg">Add</CardTitle>
         <Switch
