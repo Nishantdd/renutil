@@ -1,6 +1,6 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Minus } from "lucide-react";
+import { X } from "lucide-react";
 import { useRenameStore } from "@/store/renameStore";
 
 export default function ActionCards() {
@@ -24,7 +24,7 @@ export default function ActionCards() {
                 onClick={() => console.log("action removed", action.id)}
                 className="h-6 w-6 p-0"
               >
-                <Minus className="h-4 w-4" />
+                <X className="h-4 w-4" />
               </Button>
             </CardHeader>
 
