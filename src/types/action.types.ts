@@ -7,6 +7,7 @@ export interface BaseAction {
   createdAt: number;
 }
 
+// Add action types
 export interface AddAction extends BaseAction {
   type: "add";
   params: {
@@ -15,14 +16,48 @@ export interface AddAction extends BaseAction {
   };
 }
 
-export interface RemoveAction extends BaseAction {
-  type: "remove";
-  params: {
-    text: string;
-    mode?: "first" | "all";
-  };
+// Remove action types
+export type ModeType =
+  | "digits"
+  | "lowercase"
+  | "uppercase"
+  | "letters"
+  | "symbols"
+  | "custom_characters"
+  | "custom_position";
+  
+type CountableMode =
+  | "digits"
+  | "lowercase"
+  | "uppercase"
+  | "letters"
+  | "symbols";
+
+interface CountableParams {
+  mode: CountableMode;
+  first_n?: number;
+  last_n?: number;
 }
 
+interface CustomCharParams {
+  mode: "custom_characters";
+  custom_char: string;
+  first_n?: number;
+  last_n?: number;
+}
+
+interface PositionParams {
+  mode: "custom_position";
+  start_pos: number;
+  end_pos: number;
+}
+
+export interface RemoveAction extends BaseAction {
+  type: "remove";
+  params: CountableParams | CustomCharParams | PositionParams;
+}
+
+// Regex action types
 export interface RegexAction extends BaseAction {
   type: "regex";
   params: {

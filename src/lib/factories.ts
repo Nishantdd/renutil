@@ -1,4 +1,4 @@
-import { RenameAction } from "@/types/action.types";
+import { RemoveAction, RenameAction } from "@/types/action.types";
 
 export const uid = (prefix = "") =>
   prefix + Math.random().toString(36).slice(2, 9);
@@ -14,15 +14,21 @@ export function createAddAction(prefix = "", suffix = ""): RenameAction {
 }
 
 export function createRemoveAction(
-  text: string,
-  mode: "first" | "all" = "all",
+  params: RemoveAction["params"],
 ): RenameAction {
+  let name = `Remove ${params.mode}`;
+  if (params.mode === "custom_characters") {
+    name = `Remove "${params.custom_char}"`;
+  } else if (params.mode === "custom_position") {
+    name = `Remove range ${params.start_pos}-${params.end_pos}`;
+  }
+
   return {
     id: uid("act_"),
     type: "remove",
-    name: `Remove "${text}" (${mode})`,
+    name,
     createdAt: Date.now(),
-    params: { text, mode },
+    params,
   };
 }
 
