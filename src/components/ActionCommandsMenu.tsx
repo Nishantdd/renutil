@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Plus, Minus, Regex, Asterisk } from "lucide-react";
+import { useEffect } from "react";
+import { Plus, Minus, Regex, Asterisk } from "lucide-react"; // Added ArrowLeft
 
 import {
   CommandDialog,
@@ -14,9 +14,20 @@ import { Button } from "@/components/ui/button";
 import { Kbd, KbdGroup } from "@/components/ui/kbd";
 
 import { type } from "@tauri-apps/plugin-os";
+import { useShallow } from "zustand/react/shallow";
+import { useCommandStore } from "@/store/commandStore";
+import AddMenu from "./menus/AddMenu";
 
 export function ActionCommandMenu() {
-  const [open, setOpen] = useState(false);
+  const { open, setOpen, page, setPage } = useCommandStore(
+    useShallow((s) => ({
+      open: s.open,
+      setOpen: s.setOpen,
+      page: s.page,
+      setPage: s.setPage,
+    })),
+  );
+
   const osType = type();
 
   useEffect(() => {
@@ -30,6 +41,11 @@ export function ActionCommandMenu() {
     document.addEventListener("keydown", down);
     return () => document.removeEventListener("keydown", down);
   }, []);
+
+  const handleOpenChange = (open: boolean = false) => {
+    setOpen(open);
+    if (!open) setTimeout(() => setPage("root"), 200);
+  };
 
   return (
     <>
@@ -64,32 +80,52 @@ export function ActionCommandMenu() {
         )}
       </Button>
 
-      <CommandDialog open={open} onOpenChange={setOpen}>
-        <CommandInput placeholder="Type an action or search..." />
-        <CommandList>
-          <CommandEmpty>No results found.</CommandEmpty>
-          <CommandGroup heading="Basic">
-            <CommandItem>
-              <Plus className="mr-2 h-4 w-4" />
-              <span>Add prefix or suffix</span>
-            </CommandItem>
-            <CommandItem>
-              <Minus className="mr-2 h-4 w-4" />
-              <span>Remove</span>
-            </CommandItem>
-            <CommandItem>
-              <Regex className="mr-2 h-4 w-4" />
-              <span>Regex</span>
-            </CommandItem>
-          </CommandGroup>
-          <CommandSeparator />
-          <CommandGroup heading="Advanced">
-            <CommandItem>
-              <Asterisk className="mr-2 h-4 w-4" />
-              <span>Numbering</span>
-            </CommandItem>
-          </CommandGroup>
-        </CommandList>
+      <CommandDialog open={open} onOpenChange={handleOpenChange}>
+        {page === "root" && (
+          <>
+            <CommandInput placeholder="Type an action or search..." />
+            <CommandList>
+              <CommandEmpty>No actions found.</CommandEmpty>
+              <CommandGroup heading="Basic">
+                <CommandItem
+                  onSelect={() => {
+                    setPage("add");
+                  }}
+                >
+                  <Plus className="mr-2 h-4 w-4" />
+                  <span>Add prefix or suffix</span>
+                </CommandItem>
+                <CommandItem
+                  onSelect={() => {
+                    setPage("remove");
+                  }}
+                >
+                  <Minus className="mr-2 h-4 w-4" />
+                  <span>Remove</span>
+                </CommandItem>
+                <CommandItem
+                  onSelect={() => {
+                    setPage("regex");
+                  }}
+                >
+                  <Regex className="mr-2 h-4 w-4" />
+                  <span>Regex</span>
+                </CommandItem>
+              </CommandGroup>
+              <CommandSeparator />
+              <CommandGroup heading="Advanced">
+                <CommandItem>
+                  <Asterisk className="mr-2 h-4 w-4" />
+                  <span>Numbering</span>
+                </CommandItem>
+              </CommandGroup>
+            </CommandList>
+          </>
+        )}
+
+        {page === "add" && <AddMenu handleOpenChange={handleOpenChange} />}
+        {page === "remove" && <></>}
+        {page === "regex" && <></>}
       </CommandDialog>
     </>
   );
