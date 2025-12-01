@@ -6,53 +6,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Input } from "@/components/ui/input";
-import { useState, useRef, useEffect } from "react";
-import { Change } from "@/types/change.types";
+import { useRenameStore } from "@/store/renameStore";
 
-export default function DiffVisualizer({
-  changes,
-  setChanges,
-}: {
-  changes: Array<Change>;
-  setChanges: React.Dispatch<React.SetStateAction<Change[]>>;
-}) {
-  const [editingIndex, setEditingIndex] = useState<number | null>(null);
-  const [editValue, setEditValue] = useState("");
-  const inputRef = useRef<HTMLInputElement>(null);
+export default function DiffVisualizer() {
+  const getResults = useRenameStore((s) => s.getResults);
+  const oldFilenames = useRenameStore((s) => s.originalFiles);
+  const newFilenames = getResults();
 
-  const handleNewClick = (index: number, currentValue: string) => {
-    setEditingIndex(index);
-    setEditValue(currentValue);
-  };
-
-  const handleNewBlur = (index: number) => {
-    if (editValue !== changes[index].new) {
-      const updatedChanges = [...changes];
-      updatedChanges[index] = {
-        ...updatedChanges[index],
-        new: editValue,
-      };
-      setChanges(updatedChanges);
-    }
-    setEditingIndex(null);
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent, index: number) => {
-    if (e.key === "Enter") {
-      handleNewBlur(index);
-    } else if (e.key === "Escape") {
-      setEditingIndex(null);
-    }
-  };
-
-  useEffect(() => {
-    if (editingIndex !== null && inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, [editingIndex]);
-
-  if (!changes.length) {
+  if (!oldFilenames.length) {
     return (
       <div className="min-h-[100%] min-w-[100%] rounded-lg flex items-center justify-center">
         Please select a directory...
@@ -60,8 +21,16 @@ export default function DiffVisualizer({
     );
   }
 
+  if (oldFilenames.length !== newFilenames.length) {
+    return (
+      <div className="min-h-[100%] min-w-[100%] rounded-lg flex items-center justify-center">
+        Something went wrong performing actions, please try again...
+      </div>
+    );
+  }
+
   return (
-    <div className="border rounded-lg relative overflow-auto max-h-[70vh]">
+    <div className="border-b rounded-lg relative overflow-auto">
       <Table>
         <TableHeader className="sticky top-0">
           <TableRow>
@@ -75,32 +44,18 @@ export default function DiffVisualizer({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {changes.map((change, index) => (
+          {oldFilenames.map((filename, index) => (
             <TableRow key={index}>
               <TableCell className="sticky left-0 font-medium border-r">
                 {index + 1}
               </TableCell>
               <TableCell className="sticky left-[80px] border-r">
-                {change.old}
+                {filename}
               </TableCell>
               <TableCell>
-                {editingIndex === index ? (
-                  <Input
-                    ref={inputRef}
-                    value={editValue}
-                    onChange={(e) => setEditValue(e.target.value)}
-                    onBlur={() => handleNewBlur(index)}
-                    onKeyDown={(e) => handleKeyDown(e, index)}
-                    className="h-8"
-                  />
-                ) : (
-                  <div
-                    onClick={() => handleNewClick(index, change.new)}
-                    className="min-h-[32px] flex items-center px-3 py-1 cursor-pointer hover:bg-muted/50 rounded"
-                  >
-                    {change.new}
-                  </div>
-                )}
+                <div className="min-h-[32px] flex items-center px-3 py-1">
+                  {newFilenames[index]}
+                </div>
               </TableCell>
             </TableRow>
           ))}

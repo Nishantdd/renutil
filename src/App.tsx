@@ -7,6 +7,7 @@ import {
   createRemoveAction,
 } from "./lib/factories";
 import FolderInput from "./components/FolderInput";
+import DiffVisualizer from "./components/DiffVisualizer";
 
 export default function App() {
   const { originalFiles, actions, addAction, removeActionById, getResults } =
@@ -34,74 +35,7 @@ export default function App() {
         <Add primaryChanges={[]} setSecondaryChanges={() => {}} />
         <Add primaryChanges={[]} setSecondaryChanges={() => {}} />
       </div>
-      <div className="flex items-center justify-center">
-        {/* <div>Diff view</div> */}
-        <div
-          style={{ padding: 24, fontFamily: "Inter, system-ui, sans-serif" }}
-        >
-          <h1>Rename Pipeline — Demo</h1>
-
-          <section style={{ marginBottom: 18 }}>
-            <h2>Original files</h2>
-            <ol>
-              {originalFiles.map((f) => (
-                <li key={f}>{f}</li>
-              ))}
-            </ol>
-          </section>
-
-          <section style={{ marginBottom: 18 }}>
-            <h2>Actions</h2>
-            <div style={{ display: "flex", gap: 8, marginBottom: 8 }}>
-              <button
-                onClick={() => addAction(createAddAction("NEW_", "_v1"))}
-                title="Add prefix NEW_ and suffix _v1"
-              >
-                Add prefix/suffix
-              </button>
-
-              <button
-                onClick={() => addAction(createRemoveAction(" - ", "first"))}
-                title='Remove first occurrence of " - "'
-              >
-                Remove first " - "
-              </button>
-
-              <button
-                onClick={() =>
-                  addAction(createRegexAction("^\\d+\\s*-\\s*", "", ""))
-                }
-                title="Remove leading numbers and dash like '01 - '"
-              >
-                Strip leading numbering (regex)
-              </button>
-            </div>
-
-            <ul>
-              {actions.map((a, idx) => (
-                <li key={a.id} style={{ marginBottom: 6 }}>
-                  <strong>{idx + 1}.</strong> {a.name ?? a.type}{" "}
-                  <button
-                    onClick={() => removeActionById(a.id)}
-                    style={{ marginLeft: 8 }}
-                  >
-                    Remove
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </section>
-
-          <section>
-            <h2>Preview (result after applying actions)</h2>
-            <ol>
-              {results.map((r, i) => (
-                <li key={r + "_" + i}>{r}</li>
-              ))}
-            </ol>
-          </section>
-        </div>
-      </div>
+      <DiffVisualizer />
     </div>
   );
 }
