@@ -8,7 +8,7 @@ export default function ActionCards() {
   const removeActionById = useRenameStore((s) => s.removeActionById);
 
   return (
-    <div className="w-full">
+    <div className="w-full flex flex-col h-0 grow overflow-auto">
       {actions
         .slice()
         .reverse()
