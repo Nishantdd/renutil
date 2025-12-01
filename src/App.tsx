@@ -3,6 +3,7 @@ import FolderInput from "./components/FolderInput";
 import DiffVisualizer from "./components/DiffVisualizer";
 import { ThemeToggle } from "./components/ui/ThemeToggle";
 import { ActionCommandMenu } from "./components/ActionCommandsMenu";
+import ActionCards from "./components/ActionCards";
 
 export default function App() {
   return (
@@ -15,8 +16,7 @@ export default function App() {
       </div>
       <div className="flex flex-col bg-card border-b sm:border-b-0 sm:border-r border-border">
         <ActionCommandMenu />
-        <Add primaryChanges={[]} setSecondaryChanges={() => {}} />
-        <Add primaryChanges={[]} setSecondaryChanges={() => {}} />
+        <ActionCards />
       </div>
       <DiffVisualizer />
     </div>
