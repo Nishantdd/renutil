@@ -32,18 +32,67 @@ export default function ActionCards() {
             <CardContent className="p-0 text-sm space-y-1">
               {action.type === "add" && (
                 <div>
-                  <p>Prefix: {action.params.prefix}</p>
-                  <p>Suffix: {action.params.suffix}</p>
+                  <p>
+                    <span className="text-muted-foreground">Prefix: </span>
+                    {action.params.prefix}
+                  </p>
+                  <p>
+                    <span className="text-muted-foreground">Suffix: </span>
+                    {action.params.suffix}
+                  </p>
                 </div>
               )}
 
               {action.type === "remove" && (
-                <div>
-                  <p>Text: {action.params.text}</p>
-                  <p>Mode: {action.params.mode}</p>
+                <div className="text-sm space-y-1">
+                  <p>
+                    <span className="text-muted-foreground">Mode: </span>
+                    {action.params.mode}
+                  </p>
+
+                  {action.params.mode === "custom_position" ? (
+                    <p>
+                      <span className="text-muted-foreground">Range: </span>
+                      {action.params.start_pos} - {action.params.end_pos}
+                    </p>
+                  ) : (
+                    <>
+                      {action.params.mode === "custom_characters" && (
+                        <p>
+                          <span className="text-muted-foreground">Text:</span> "
+                          {action.params.custom_char}"
+                        </p>
+                      )}
+
+                      {!action.params.first_n && !action.params.last_n ? (
+                        <p className="text-muted-foreground">
+                          Removes all occurrences
+                        </p>
+                      ) : (
+                        <div className="flex gap-3">
+                          {!!action.params.first_n && (
+                            <p>
+                              <span className="text-muted-foreground">
+                                First:{" "}
+                              </span>
+                              {action.params.first_n}
+                            </p>
+                          )}
+                          {!!action.params.last_n && (
+                            <p>
+                              <span className="text-muted-foreground">
+                                Last:{" "}
+                              </span>
+                              {action.params.last_n}
+                            </p>
+                          )}
+                        </div>
+                      )}
+                    </>
+                  )}
                 </div>
               )}
-
+              
               {action.type === "regex" && (
                 <div>
                   <p>Pattern: {action.params.pattern}</p>
