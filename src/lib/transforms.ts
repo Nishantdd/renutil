@@ -10,9 +10,24 @@ export const ACTION_TRANSFORMS: {
     action: Extract<RenameAction, { type: K }>,
   ) => string;
 } = {
-  add: (name, action) => {
-    const { prefix = "", suffix = "" } = action.params;
-    return `${prefix}${name}${suffix}`;
+  addPrefix: (name, action) => {
+    const { prefix = "" } = action.params;
+    return `${prefix}${name}`;
+  },
+
+  addSuffix: (name, action) => {
+    const { suffix = "" } = action.params;
+    return `${name}${suffix}`;
+  },
+
+  addAtPosition: (name, action) => {
+    const { position = 1, text = "" } = action.params;
+
+    if (!text) return name;
+    if (position <= 0) return `${text}${name}`;
+    if (position >= name.length) return `${name}${text}`;
+
+    return name.slice(0, position) + text + name.slice(position);
   },
 
   remove: (name, action) => {
@@ -126,7 +141,7 @@ export const ACTION_TRANSFORMS: {
 
     return result;
   },
-  
+
   regex: (name, action) => {
     const { pattern, flags = "", replacement = "" } = action.params;
     if (!pattern) return name;

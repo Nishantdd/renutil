@@ -30,15 +30,33 @@ export default function ActionCards() {
             </CardHeader>
 
             <CardContent className="p-0 text-sm space-y-1">
-              {action.type === "add" && (
+              {action.type === "addPrefix" && (
                 <div>
                   <p>
                     <span className="text-muted-foreground">Prefix: </span>
                     {action.params.prefix}
                   </p>
+                </div>
+              )}
+
+              {action.type === "addSuffix" && (
+                <div>
                   <p>
                     <span className="text-muted-foreground">Suffix: </span>
                     {action.params.suffix}
+                  </p>
+                </div>
+              )}
+
+              {action.type === "addAtPosition" && (
+                <div>
+                  <p>
+                    <span className="text-muted-foreground">Position: </span>
+                    {action.params.position}
+                  </p>
+                  <p>
+                    <span className="text-muted-foreground">Text: </span>
+                    {action.params.text}
                   </p>
                 </div>
               )}

@@ -5,16 +5,15 @@ import { useState } from "react";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { useRenameStore } from "@/store/renameStore";
-import { createAddAction } from "@/lib/factories";
+import { createAddPrefixAction } from "@/lib/factories";
 
-export default function AddMenu({
+export default function AddPrefixMenu({
   handleOpenChange,
 }: {
   handleOpenChange: () => void;
 }) {
   const setPage = useCommandStore((s) => s.setPage);
   const addAction = useRenameStore((s) => s.addAction);
-  const [suffix, setSuffix] = useState("");
   const [prefix, setPrefix] = useState("");
 
   const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -23,12 +22,8 @@ export default function AddMenu({
   };
 
   const handleApply = () => {
-    if (!suffix && !prefix) {
-      handleOpenChange();
-      return;
-    }
-    
-    addAction(createAddAction(prefix, suffix));
+    if (!prefix) return;
+    addAction(createAddPrefixAction(prefix));
     handleOpenChange();
   };
 
@@ -43,7 +38,7 @@ export default function AddMenu({
         >
           <ArrowLeft className="h-4 w-4" />
         </Button>
-        <span className="text-sm font-medium">Add Prefix / Suffix</span>
+        <span className="text-sm font-medium">Add Prefix</span>
       </div>
 
       <div className="grid gap-4 py-2">
@@ -53,18 +48,9 @@ export default function AddMenu({
             id="prefix"
             autoFocus
             placeholder="Enter prefix..."
+            minLength={1}
             value={prefix}
             onChange={(e) => setPrefix(e.target.value)}
-            onKeyDown={handleInputKeyDown}
-          />
-        </div>
-        <div className="grid gap-2">
-          <Label htmlFor="suffix">Suffix</Label>
-          <Input
-            id="suffix"
-            placeholder="Enter suffix..."
-            value={suffix}
-            onChange={(e) => setSuffix(e.target.value)}
             onKeyDown={handleInputKeyDown}
           />
         </div>

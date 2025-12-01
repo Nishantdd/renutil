@@ -16,9 +16,11 @@ import { Kbd, KbdGroup } from "@/components/ui/kbd";
 import { type } from "@tauri-apps/plugin-os";
 import { useShallow } from "zustand/react/shallow";
 import { useCommandStore } from "@/store/commandStore";
-import AddMenu from "./menus/AddMenu";
+import AddPrefixMenu from "./menus/AddPrefixMenu";
 import RemoveMenu from "./menus/RemoveMenu";
 import ReplaceMenu from "./menus/ReplaceMenu";
+import AddSuffixMenu from "./menus/AddSuffixMenu";
+import AddAtPositionMenu from "./menus/AddAtPositionMenu";
 
 export function ActionCommandMenu() {
   const { open, setOpen, page, setPage } = useCommandStore(
@@ -91,11 +93,27 @@ export function ActionCommandMenu() {
               <CommandGroup heading="Basic">
                 <CommandItem
                   onSelect={() => {
-                    setPage("add");
+                    setPage("addPrefix");
                   }}
                 >
                   <Plus className="mr-2 h-4 w-4" />
-                  <span>Add prefix or suffix</span>
+                  <span>Add prefix</span>
+                </CommandItem>
+                <CommandItem
+                  onSelect={() => {
+                    setPage("addSuffix");
+                  }}
+                >
+                  <Plus className="mr-2 h-4 w-4" />
+                  <span>Add suffix</span>
+                </CommandItem>
+                <CommandItem
+                  onSelect={() => {
+                    setPage("addAtPosition");
+                  }}
+                >
+                  <Plus className="mr-2 h-4 w-4" />
+                  <span>Add at position</span>
                 </CommandItem>
                 <CommandItem
                   onSelect={() => {
@@ -129,7 +147,15 @@ export function ActionCommandMenu() {
           </>
         )}
 
-        {page === "add" && <AddMenu handleOpenChange={handleOpenChange} />}
+        {page === "addPrefix" && (
+          <AddPrefixMenu handleOpenChange={handleOpenChange} />
+        )}
+        {page === "addSuffix" && (
+          <AddSuffixMenu handleOpenChange={handleOpenChange} />
+        )}
+        {page === "addAtPosition" && (
+          <AddAtPositionMenu handleOpenChange={handleOpenChange} />
+        )}
         {page === "remove" && (
           <RemoveMenu handleOpenChange={handleOpenChange} />
         )}

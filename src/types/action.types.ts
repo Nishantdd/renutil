@@ -1,18 +1,42 @@
-export type ActionType = "add" | "remove" | "replace" | "regex";
+export type ActionType =
+  | "addPrefix"
+  | "addSuffix"
+  | "addAtPosition"
+  | "remove"
+  | "replace"
+  | "regex";
 
 export interface BaseAction {
   id: string;
   type: ActionType;
+  displayName: string;
   name?: string;
   createdAt: number;
 }
 
 // Add action types
-export interface AddAction extends BaseAction {
-  type: "add";
+export interface AddPrefixAction extends BaseAction {
+  type: "addPrefix";
+  displayName: "Add Prefix";
   params: {
-    prefix?: string;
-    suffix?: string;
+    prefix: string;
+  };
+}
+
+export interface AddSuffixAction extends BaseAction {
+  type: "addSuffix";
+  displayName: "Add Suffix";
+  params: {
+    suffix: string;
+  };
+}
+
+export interface AddAtPositionAction extends BaseAction {
+  type: "addAtPosition";
+  displayName: "Add At Position";
+  params: {
+    position: number;
+    text: string;
   };
 }
 
@@ -54,12 +78,14 @@ interface PositionParams {
 
 export interface RemoveAction extends BaseAction {
   type: "remove";
+  displayName: "Remove";
   params: CountableParams | CustomCharParams | PositionParams;
 }
 
 // Replace action types
 export interface ReplaceAction extends BaseAction {
   type: "replace";
+  displayName: "Replace";
   params: {
     toReplace: string;
     replaceWith: string;
@@ -71,6 +97,7 @@ export interface ReplaceAction extends BaseAction {
 // Regex action types
 export interface RegexAction extends BaseAction {
   type: "regex";
+  displayName: "Regex";
   params: {
     pattern: string;
     flags?: string;
@@ -79,7 +106,9 @@ export interface RegexAction extends BaseAction {
 }
 
 export type RenameAction =
-  | AddAction
+  | AddPrefixAction
+  | AddSuffixAction
+  | AddAtPositionAction
   | RemoveAction
   | ReplaceAction
   | RegexAction;
