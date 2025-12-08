@@ -6,7 +6,7 @@ import ActionCards from "./components/ActionCards";
 
 export default function App() {
   return (
-    <div className="grid grid-cols-[1.5fr_3fr] grid-rows-[auto_1fr] h-screen w-screen">
+    <div className="grid grid-cols-[340px_1fr] grid-rows-[auto_1fr] h-screen w-screen">
       <div className="bg-secondary border-b border-r border-border">
         <FolderInput />
       </div>
