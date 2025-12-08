@@ -62,9 +62,6 @@ importers:
       cmdk:
         specifier: ^1.1.1
         version: 1.1.1(@types/react-dom@19.1.5(@types/react@19.1.4))(@types/react@19.1.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      immer:
-        specifier: ^11.0.1
-        version: 11.0.1
       lucide-react:
         specifier: ^0.511.0
         version: 0.511.0(react@19.1.0)
@@ -2793,7 +2790,8 @@ snapshots:
 
   graceful-fs@4.2.11: {}
 
-  immer@11.0.1: {}
+  immer@11.0.1:
+    optional: true
 
   jiti@2.4.2: {}
 
