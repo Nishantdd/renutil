@@ -69,7 +69,7 @@ export default function DiffVisualizer() {
               <TableCell className="font-medium border-r">
                 {index + 1}
               </TableCell>
-              <TableCell className="border-r">
+              <TableCell className="border-r select-text">
                 {filename}
               </TableCell>
               <TableCell>
