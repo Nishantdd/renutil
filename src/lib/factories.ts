@@ -1,4 +1,4 @@
-import { RenameAction, CountableRemovalParams } from "@/types/action.types.ts";
+import { RenameAction, CountableRemovalParams, NumberingActionMode } from "@/types/action.types.ts";
 
 export const uid = (prefix = "") =>
   prefix + Math.random().toString(36).slice(2, 9);
@@ -186,4 +186,20 @@ export function createRegexAction(
     createdAt: Date.now(),
     params: { pattern, flags, replacement },
   };
+}
+
+export function createNumberingAction(
+  mode: NumberingActionMode,
+  position = 0,
+  startsFrom = 0,
+  incremental = 0,
+): RenameAction {
+  return {
+    id: uid("act_"),
+    type: "numbering",
+    displayName: "Numbering",
+    name: `Incremental numbering`,
+    createdAt: Date.now(),
+    params: { mode, position, startsFrom, incremental }
+  }
 }

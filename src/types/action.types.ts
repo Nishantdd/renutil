@@ -133,10 +133,17 @@ export interface RegexAction extends BaseAction {
 }
 
 // Numbering action types
+export type NumberingActionMode = "numeric" | "roman" | "alphabet"
+
 export interface NumberingAction extends BaseAction {
   type: "numbering";
   displayName: "Numbering";
-  params: {}
+  params: {
+    mode: NumberingActionMode;
+    position: number;
+    startsFrom?: number;
+    incremental?: number;
+  }
 }
 
 export type RenameAction =

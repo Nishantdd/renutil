@@ -51,7 +51,7 @@ export const useRenameStore = create<RenameState>((set, get) => {
 
         // compute cache[startIndex] from previous
         const prev = cache.get(startIndex - 1) ?? state.originalFiles;
-        const result = prev.map((n) => applyAction(n, action));
+        const result = prev.map((name, index) => applyAction(name, action, index));
         cache.set(startIndex, result);
         return { actions, cache };
       }),

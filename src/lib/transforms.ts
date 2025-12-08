@@ -1,5 +1,5 @@
 import { RenameAction } from "@/types/action.types";
-import { applyCountableRemoval } from "./utils";
+import { applyCountableRemoval, toAlphabet, toRoman } from "./utils";
 
 /**
  * Pure transformers: each takes a filename and an action, returns new filename.
@@ -9,6 +9,7 @@ export const ACTION_TRANSFORMS: {
   [K in RenameAction["type"]]: (
     name: string,
     action: Extract<RenameAction, { type: K }>,
+    index: number
   ) => string;
 } = {
   addPrefix: (name, action) => {
@@ -124,8 +125,31 @@ export const ACTION_TRANSFORMS: {
       return name;
     }
   },
+
+  numbering: (name, action, index) => {
+    const { mode, position, incremental = 1, startsFrom = 1 } = action.params;
+    if (!position) return name;
+    const pos = Math.min(Math.max(0, position), name.length);
+
+    const value = startsFrom + index * incremental;
+
+    let insertValue = "";
+    switch (mode) {
+      case "numeric":
+        insertValue = value.toString();
+        break;
+      case "roman":
+        insertValue = toRoman(value);
+        break;
+      case "alphabet":
+        insertValue = toAlphabet(value - 1);
+        break;
+    }
+
+    return name.slice(0, pos) + insertValue + name.slice(pos);
+  }
 };
 
-export function applyAction(filename: string, action: RenameAction): string {
-  return ACTION_TRANSFORMS[action.type](filename as any, action as any);
+export function applyAction(filename: string, action: RenameAction, index: number): string {
+  return ACTION_TRANSFORMS[action.type](filename as any, action as any, index);
 }

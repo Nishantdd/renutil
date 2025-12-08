@@ -5,12 +5,12 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export const applyCountableRemoval = (
+export function applyCountableRemoval(
   name: string,
   pattern: RegExp,
   firstN: number = 0,
   lastN: number = 0,
-): string => {
+): string {
   if (firstN === 0 && lastN === 0) {
     return name.replace(pattern, "");
   }
@@ -45,3 +45,30 @@ export const applyCountableRemoval = (
 
   return result;
 };
+
+export function toRoman(num: number): string {
+  const romanMap: [number, string][] = [
+    [1000, "m"], [900, "cm"], [500, "d"], [400, "cd"],
+    [100, "c"], [90, "xc"], [50, "l"], [40, "xl"],
+    [10, "x"], [9, "ix"], [5, "v"], [4, "iv"], [1, "i"],
+  ];
+
+  let result = "";
+  for (const [value, numeral] of romanMap) {
+    while (num >= value) {
+      result += numeral;
+      num -= value;
+    }
+  }
+
+  return result;
+}
+
+export function toAlphabet(n: number): string {
+  let str = "";
+  while (n >= 0) {
+    str = String.fromCharCode((n % 26) + 97) + str;
+    n = Math.floor(n / 26) - 1;
+  }
+  return str;
+}
