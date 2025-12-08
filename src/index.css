@@ -119,10 +119,42 @@
 @layer base {
     * {
         @apply border-border outline-ring/50;
-        -webkit-user-select: none; /* Safari */
-        -ms-user-select: none; /* IE 10 and IE 11 */
-        user-select: none; /* Standard syntax */
+        -webkit-user-select: none;
+        /* Safari */
+        -ms-user-select: none;
+        /* IE 10 and IE 11 */
+        user-select: none;
+        /* Standard syntax */
     }
+
+    ::-webkit-scrollbar {
+        width: 12px;
+        height: 12px;
+        background: var(--color-background);
+        border-radius: var(--radius-md);
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: var(--color-muted);
+        border-radius: var(--radius-md);
+        border: 2px solid var(--color-background);
+        transition: background 0.2s;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: var(--color-primary);
+    }
+
+    ::-webkit-scrollbar-track {
+        background: var(--color-background);
+        border-radius: var(--radius-md);
+    }
+
+    html {
+        scrollbar-width: thin;
+        scrollbar-color: var(--color-muted) var(--color-background);
+    }
+
     :root {
         font-family:
             Geist,
@@ -145,9 +177,11 @@
         -moz-osx-font-smoothing: grayscale;
         -webkit-text-size-adjust: 100%;
     }
+
     body {
         @apply bg-background text-foreground;
     }
+
     button,
     [role="button"] {
         cursor: pointer;
