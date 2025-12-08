@@ -69,7 +69,7 @@ export const useRenameStore = create<RenameState>((set, get) => {
         const recompute = (start: number, actionsList: RenameAction[]) => {
           for (let i = start; i < actionsList.length; i++) {
             const prev = cache.get(i - 1) ?? state.originalFiles;
-            const out = prev.map((f) => applyAction(f, actionsList[i]));
+            const out = prev.map((f, index) => applyAction(f, actionsList[i], index));
             cache.set(i, out);
           }
         };
@@ -89,7 +89,7 @@ export const useRenameStore = create<RenameState>((set, get) => {
         for (let i = idx; i <= state.actions.length; i++) cache.delete(i);
         for (let i = idx; i < actions.length; i++) {
           const prev = cache.get(i - 1) ?? state.originalFiles;
-          const out = prev.map((f) => applyAction(f, actions[i]));
+          const out = prev.map((f, index) => applyAction(f, actions[i], index));
           cache.set(i, out);
         }
 
@@ -109,7 +109,7 @@ export const useRenameStore = create<RenameState>((set, get) => {
 
         for (let i = idx; i < actions.length; i++) {
           const prev = cache.get(i - 1) ?? state.originalFiles;
-          const out = prev.map((f) => applyAction(f, actions[i]));
+          const out = prev.map((f, index) => applyAction(f, actions[i], index));
           cache.set(i, out);
         }
 
@@ -128,7 +128,7 @@ export const useRenameStore = create<RenameState>((set, get) => {
           cache.delete(i);
         for (let i = startIndex; i < actions.length; i++) {
           const prev = cache.get(i - 1) ?? state.originalFiles;
-          const out = prev.map((f) => applyAction(f, actions[i]));
+          const out = prev.map((f, index) => applyAction(f, actions[i], index));
           cache.set(i, out);
         }
         return { actions, cache };
@@ -141,7 +141,7 @@ export const useRenameStore = create<RenameState>((set, get) => {
           cache.delete(i);
         for (let i = startIndex; i < state.actions.length; i++) {
           const prev = cache.get(i - 1) ?? state.originalFiles;
-          const out = prev.map((f) => applyAction(f, state.actions[i]));
+          const out = prev.map((f, index) => applyAction(f, state.actions[i], index));
           cache.set(i, out);
         }
         return { cache };
