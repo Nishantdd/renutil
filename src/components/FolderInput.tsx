@@ -8,7 +8,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { open } from "@tauri-apps/plugin-dialog";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRenameStore } from "@/store/renameStore";
 import { invoke } from "@tauri-apps/api/core";
 
@@ -16,6 +16,18 @@ export default function FolderInput() {
   const [folderPath, setFolderPath] = useState("");
   const [loading, setLoading] = useState(false);
   const setOriginalFiles = useRenameStore((s) => s.setOriginalFiles);
+
+  useEffect(() => {
+    const down = async (e: KeyboardEvent) => {
+      if (e.key === "o" && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        handleOpenFolder();
+      }
+    };
+
+    document.addEventListener("keydown", down);
+    return () => document.removeEventListener("keydown", down);
+  }, []);
 
   const handleOpenFolder = async () => {
     setLoading(true);

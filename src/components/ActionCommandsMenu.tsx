@@ -27,6 +27,7 @@ import RegexMenu from "./menus/RegexMenu";
 import NumberingMenu from "./menus/NumberingMenu";
 
 export function ActionCommandMenu() {
+  const osType = type();
   const { open, setOpen, page, setPage } = useCommandStore(
     useShallow((s) => ({
       open: s.open,
@@ -35,8 +36,6 @@ export function ActionCommandMenu() {
       setPage: s.setPage,
     })),
   );
-
-  const osType = type();
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {

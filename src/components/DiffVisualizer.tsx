@@ -8,6 +8,8 @@ import {
 } from "@/components/ui/table";
 import { StringDiff } from 'react-string-diff';
 import { useRenameStore } from "@/store/renameStore";
+import { type } from "@tauri-apps/plugin-os";
+import { Kbd, KbdGroup } from "./ui/kbd";
 
 type DiffStyles = {
   added: React.CSSProperties;
@@ -26,6 +28,7 @@ const diffStyle: DiffStyles = {
 };
 
 export default function DiffVisualizer() {
+  const osType = type();
   const oldFilenames = useRenameStore((s) => s.originalFiles);
   const newFilenames = useRenameStore((s) => {
     const lastIndex = s.actions.length - 1;
@@ -35,8 +38,24 @@ export default function DiffVisualizer() {
 
   if (!oldFilenames.length) {
     return (
-      <div className="min-h-[100%] min-w-[100%] rounded-lg flex items-center justify-center">
-        Please select a directory...
+      <div className="min-h-[100%] min-w-[100%] rounded-lg flex flex-col gap-2 items-center justify-center">
+        Please select a directory
+        {osType === "macos" && (
+          <div className="flex">
+            <KbdGroup>
+              <Kbd>⌘</Kbd>
+              <Kbd>O</Kbd>
+            </KbdGroup>
+          </div>
+        )}
+        {(osType === "windows" || osType === "linux") && (
+          <div className="flex">
+            <KbdGroup>
+              <Kbd className="font-mono">Ctrl</Kbd>
+              <Kbd className="font-mono">O</Kbd>
+            </KbdGroup>
+          </div>
+        )}
       </div>
     );
   }
