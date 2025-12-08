@@ -57,11 +57,13 @@ export default function AddAtPositionMenu({
           />
         </div>
         <div className="grid gap-2">
-          <Label htmlFor="position">Position</Label>
+          <Label htmlFor="position">
+            Position
+            <span className="text-xs text-muted-foreground">(-1 for last pos)</span>
+          </Label>
           <Input
             id="position"
             type="number"
-            min={1}
             placeholder="1"
             value={position}
             onChange={(e) => setPosition(e.target.value)}

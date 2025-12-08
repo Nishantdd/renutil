@@ -23,12 +23,10 @@ export const ACTION_TRANSFORMS: {
 
   addAtPosition: (name, action) => {
     const { position = 1, text = "" } = action.params;
-
     if (!text) return name;
-    if (position <= 0) return `${text}${name}`;
-    if (position >= name.length) return `${name}${text}`;
-
-    return name.slice(0, position) + text + name.slice(position);
+    let idx = position < 0 ? name.length + position : position;
+    idx = Math.max(0, Math.min(idx, name.length));
+    return name.slice(0, idx) + text + name.slice(idx);
   },
 
   removeDigits: (name, action) => {
