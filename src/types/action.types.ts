@@ -10,7 +10,8 @@ export type ActionType =
   | "removeCustomCharacters"
   | "removeAtPosition"
   | "replace"
-  | "regex";
+  | "regex"
+  | "numbering";
 
 export interface BaseAction {
   id: string;
@@ -131,6 +132,13 @@ export interface RegexAction extends BaseAction {
   };
 }
 
+// Numbering action types
+export interface NumberingAction extends BaseAction {
+  type: "numbering";
+  displayName: "Numbering";
+  params: {}
+}
+
 export type RenameAction =
   | AddPrefixAction
   | AddSuffixAction
@@ -143,4 +151,5 @@ export type RenameAction =
   | RemoveCustomCharactersAction
   | RemoveAtPositionAction
   | ReplaceAction
-  | RegexAction;
+  | RegexAction
+  | NumberingAction;
