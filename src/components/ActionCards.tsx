@@ -66,33 +66,33 @@ export default function ActionCards() {
                 action.type === "removeUppercase" ||
                 action.type === "removeLetters" ||
                 action.type === "removeSymbols") && (
-                <div className="text-sm space-y-1">
-                  <p>
-                    <span className="text-muted-foreground">Target: </span>
-                    {action.displayName.replace("Remove ", "")}
-                  </p>
-                  {!action.params.firstN && !action.params.lastN ? (
-                    <p className="text-muted-foreground">
-                      Removes all occurrences
+                  <div className="text-sm space-y-1">
+                    <p>
+                      <span className="text-muted-foreground">Target: </span>
+                      {action.displayName.replace("Remove ", "")}
                     </p>
-                  ) : (
-                    <div className="flex gap-3">
-                      {!!action.params.firstN && (
-                        <p>
-                          <span className="text-muted-foreground">First: </span>
-                          {action.params.firstN}
-                        </p>
-                      )}
-                      {!!action.params.lastN && (
-                        <p>
-                          <span className="text-muted-foreground">Last: </span>
-                          {action.params.lastN}
-                        </p>
-                      )}
-                    </div>
-                  )}
-                </div>
-              )}
+                    {!action.params.firstN && !action.params.lastN ? (
+                      <p className="text-muted-foreground">
+                        Removes all occurrences
+                      </p>
+                    ) : (
+                      <div className="flex gap-3">
+                        {!!action.params.firstN && (
+                          <p>
+                            <span className="text-muted-foreground">First: </span>
+                            {action.params.firstN}
+                          </p>
+                        )}
+                        {!!action.params.lastN && (
+                          <p>
+                            <span className="text-muted-foreground">Last: </span>
+                            {action.params.lastN}
+                          </p>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                )}
 
               {action.type === "removeCustomCharacters" && (
                 <div className="text-sm space-y-1">
@@ -152,6 +152,15 @@ export default function ActionCards() {
                   <p>Pattern: {action.params.pattern}</p>
                   {action.params.flags && <p>Flags: {action.params.flags}</p>}
                   <p>Replacement: {action.params.replacement}</p>
+                </div>
+              )}
+
+              {action.type === "numbering" && (
+                <div>
+                  <p>Mode: {action.params.mode}</p>
+                  <p>Position: {action.params.position}</p>
+                  {action.params.incremental && <p>Incremental: {action.params.incremental}</p>}
+                  {action.params.startsFrom && <p>Starting Point: {action.params.startsFrom}</p>}
                 </div>
               )}
             </CardContent>
