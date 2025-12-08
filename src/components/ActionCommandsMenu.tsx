@@ -23,6 +23,7 @@ import AddAtPositionMenu from "./menus/AddAtPositionMenu";
 import CountableRemoveMenu from "./menus/CountableRemoveMenu";
 import RemoveAtPositionMenu from "./menus/RemoveAtPositionMenu";
 import RemoveCustomCharactersMenu from "./menus/RemoveCustomCharacterMenu";
+import RegexMenu from "./menus/RegexMenu";
 
 export function ActionCommandMenu() {
   const { open, setOpen, page, setPage } = useCommandStore(
@@ -184,7 +185,11 @@ export function ActionCommandMenu() {
               </CommandGroup>
               <CommandSeparator />
               <CommandGroup heading="Advanced">
-                <CommandItem>
+                <CommandItem
+                  onSelect={() => {
+                    setPage("regex");
+                  }}
+                >
                   <Regex className="mr-2 h-4 w-4" />
                   <span>Regex</span>
                 </CommandItem>
@@ -248,7 +253,7 @@ export function ActionCommandMenu() {
           <ReplaceMenu handleOpenChange={handleOpenChange} />
         )}
 
-        {page === "regex" && <></>}
+        {page === "regex" && <RegexMenu handleOpenChange={handleOpenChange} />}
       </CommandDialog>
     </>
   );
