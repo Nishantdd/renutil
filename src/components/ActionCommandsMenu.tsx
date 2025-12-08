@@ -59,7 +59,7 @@ export function ActionCommandMenu() {
         type="button"
         size="icon"
         variant="ghost"
-        className="border-b w-full flex flex-wrap justify-between h-10 px-0"
+        className="border-b w-full flex justify-between h-10 px-0"
         onClick={() => setOpen(true)}
       >
         <div className="flex justify-center items-center gap-2 ml-2">
