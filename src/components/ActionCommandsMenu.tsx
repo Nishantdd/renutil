@@ -24,6 +24,7 @@ import CountableRemoveMenu from "./menus/CountableRemoveMenu";
 import RemoveAtPositionMenu from "./menus/RemoveAtPositionMenu";
 import RemoveCustomCharactersMenu from "./menus/RemoveCustomCharacterMenu";
 import RegexMenu from "./menus/RegexMenu";
+import NumberingMenu from "./menus/NumberingMenu";
 
 export function ActionCommandMenu() {
   const { open, setOpen, page, setPage } = useCommandStore(
@@ -193,7 +194,10 @@ export function ActionCommandMenu() {
                   <Regex className="mr-2 h-4 w-4" />
                   <span>Regex</span>
                 </CommandItem>
-                <CommandItem>
+                <CommandItem
+                  onSelect={() => {
+                    setPage("numbering")
+                  }}>
                   <Asterisk className="mr-2 h-4 w-4" />
                   <span>Numbering</span>
                 </CommandItem>
@@ -254,6 +258,8 @@ export function ActionCommandMenu() {
         )}
 
         {page === "regex" && <RegexMenu handleOpenChange={handleOpenChange} />}
+
+        {page === "numbering" && <NumberingMenu handleOpenChange={handleOpenChange} />}
       </CommandDialog>
     </>
   );

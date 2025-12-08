@@ -128,9 +128,6 @@ export const ACTION_TRANSFORMS: {
 
   numbering: (name, action, index) => {
     const { mode, position, incremental = 1, startsFrom = 1 } = action.params;
-    if (!position) return name;
-    const pos = Math.min(Math.max(0, position), name.length);
-
     const value = startsFrom + index * incremental;
 
     let insertValue = "";
@@ -144,6 +141,14 @@ export const ACTION_TRANSFORMS: {
       case "alphabet":
         insertValue = toAlphabet(value - 1);
         break;
+    }
+
+    let pos = 0;
+    if (position >= 0) {
+      pos = Math.min(position, name.length);
+    } else {
+      const offset = name.length + position + 1;
+      pos = Math.min(Math.max(0, offset), name.length);
     }
 
     return name.slice(0, pos) + insertValue + name.slice(pos);
