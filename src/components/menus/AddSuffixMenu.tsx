@@ -47,6 +47,7 @@ export default function AddSuffixMenu({
           <Input
             id="suffix"
             placeholder="Enter suffix..."
+            autoFocus
             value={suffix}
             minLength={1}
             onChange={(e) => setSuffix(e.target.value)}

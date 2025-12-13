@@ -82,6 +82,7 @@ export default function CountableRemoveMenu({
           <Input
             id="firstN"
             type="number"
+            autoFocus
             min={0}
             placeholder="All"
             value={firstN}
