@@ -91,7 +91,7 @@ export default function DiffVisualizer() {
   }
 
   return (
-    <div className="h-full relative flex flex-col border-b rounded-lg overflow-hidden">
+    <div className="h-full relative flex flex-col rounded-lg overflow-hidden">
       <div className="flex-1 overflow-auto w-full">
         <Table>
           <TableHeader className="sticky top-0">
@@ -103,7 +103,7 @@ export default function DiffVisualizer() {
               <TableHead className="min-w-[200px]">New name</TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody>
+          <TableBody className="border-b">
             {currentOldFiles.map((filename, i) => {
               const globalIndex = startIndex + i;
               return (
