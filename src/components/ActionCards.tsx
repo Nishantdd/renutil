@@ -21,16 +21,16 @@ export default function ActionCards() {
   };
 
   return (
-    <div className="w-full flex flex-col h-0 grow overflow-auto">
+    <div className="w-full flex flex-col h-0 grow overflow-y-auto overflow-x-hidden">
       {actions.map((action, index) => (
         <Card key={action.id} className="border-0 border-b shadow-none p-4">
-          <CardHeader className="flex flex-row items-center justify-between p-0 gap-2">
-            <CardTitle className="text-base font-medium flex gap-2 flex-1">
-              <span>{index + 1}.</span>
-              <span className="capitalize">{action.type}</span>
+          <CardHeader className="flex flex-row items-center justify-between p-0 gap-2 min-w-0">
+            <CardTitle className="text-base font-medium flex gap-2 flex-1 min-w-0">
+              <span className="flex-shrink-0">{index + 1}.</span>
+              <span className="capitalize truncate">{action.type}</span>
             </CardTitle>
 
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1 flex-shrink-0">
               <Button
                 variant="ghost"
                 size="icon"
@@ -63,34 +63,34 @@ export default function ActionCards() {
             </div>
           </CardHeader>
 
-          <CardContent className="p-0 text-sm space-y-1 mt-2">
+          <CardContent className="p-0 text-sm space-y-1 mt-2 min-w-0">
             {action.type === "addPrefix" && (
-              <div>
-                <p>
+              <div className="min-w-0">
+                <p className="truncate">
                   <span className="text-muted-foreground">Prefix: </span>
-                  {action.params.prefix}
+                  <span className="break-all">{action.params.prefix}</span>
                 </p>
               </div>
             )}
 
             {action.type === "addSuffix" && (
-              <div>
-                <p>
+              <div className="min-w-0">
+                <p className="truncate">
                   <span className="text-muted-foreground">Suffix: </span>
-                  {action.params.suffix}
+                  <span className="break-all">{action.params.suffix}</span>
                 </p>
               </div>
             )}
 
             {action.type === "addAtPosition" && (
-              <div>
-                <p>
+              <div className="min-w-0">
+                <p className="truncate">
                   <span className="text-muted-foreground">Position: </span>
                   {action.params.position}
                 </p>
-                <p>
+                <p className="truncate">
                   <span className="text-muted-foreground">Text: </span>
-                  {action.params.text}
+                  <span className="break-all">{action.params.text}</span>
                 </p>
               </div>
             )}
@@ -129,10 +129,10 @@ export default function ActionCards() {
             )}
 
             {action.type === "removeCustomCharacters" && (
-              <div className="text-sm space-y-1">
-                <p>
+              <div className="text-sm space-y-1 min-w-0">
+                <p className="truncate">
                   <span className="text-muted-foreground">Text: </span>"
-                  {action.params.customChar}"
+                  <span className="break-all">{action.params.customChar}</span>"
                 </p>
                 {!action.params.firstN && !action.params.lastN ? (
                   <p className="text-muted-foreground">
@@ -167,23 +167,34 @@ export default function ActionCards() {
             )}
 
             {action.type === "replace" && (
-              <div>
-                <p>
+              <div className="min-w-0">
+                <p className="truncate">
                   <span className="text-muted-foreground">To replace: </span>
-                  {action.params.toReplace}
+                  <span className="break-all">{action.params.toReplace}</span>
                 </p>
-                <p>
+                <p className="truncate">
                   <span className="text-muted-foreground">Replace with: </span>
-                  {action.params.replaceWith}
+                  <span className="break-all">{action.params.replaceWith}</span>
                 </p>
               </div>
             )}
 
             {action.type === "regex" && (
-              <div>
-                <p>Pattern: {action.params.pattern}</p>
-                {action.params.flags && <p>Flags: {action.params.flags}</p>}
-                <p>Replacement: {action.params.replacement}</p>
+              <div className="min-w-0">
+                <p className="truncate">
+                  <span className="text-muted-foreground">Pattern: </span>
+                  <span className="break-all">{action.params.pattern}</span>
+                </p>
+                {action.params.flags && (
+                  <p className="truncate">
+                    <span className="text-muted-foreground">Flags: </span>
+                    {action.params.flags}
+                  </p>
+                )}
+                <p className="truncate">
+                  <span className="text-muted-foreground">Replacement: </span>
+                  <span className="break-all">{action.params.replacement}</span>
+                </p>
               </div>
             )}
 
