@@ -6,10 +6,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { StringDiff } from 'react-string-diff';
+import { StringDiff } from "react-string-diff";
 import { useRenameStore } from "@/store/renameStore";
 import { type } from "@tauri-apps/plugin-os";
 import { Kbd, KbdGroup } from "./ui/kbd";
+import { useOptionStore } from "@/store/optionStore";
 
 type DiffStyles = {
   added: React.CSSProperties;
@@ -19,16 +20,17 @@ type DiffStyles = {
 
 const diffStyle: DiffStyles = {
   added: {
-    backgroundColor: 'var(--color-diff-add)'
+    backgroundColor: "var(--color-diff-add)",
   },
   removed: {
-    backgroundColor: 'var(--color-diff-remove)'
+    backgroundColor: "var(--color-diff-remove)",
   },
-  default: {}
+  default: {},
 };
 
 export default function DiffVisualizer() {
   const osType = type();
+  const showDiff = useOptionStore((s) => s.showDiff);
   const oldFilenames = useRenameStore((s) => s.originalFiles);
   const newFilenames = useRenameStore((s) => {
     const lastIndex = s.actions.length - 1;
@@ -73,9 +75,7 @@ export default function DiffVisualizer() {
       <Table>
         <TableHeader className="sticky top-0">
           <TableRow>
-            <TableHead className="z-10 border-r">
-              Sno
-            </TableHead>
+            <TableHead className="z-10 border-r">Sno</TableHead>
             <TableHead className="z-10 min-w-[200px] border-r">
               Old name
             </TableHead>
@@ -88,11 +88,17 @@ export default function DiffVisualizer() {
               <TableCell className="font-medium border-r">
                 {index + 1}
               </TableCell>
-              <TableCell className="border-r select-text">
-                {filename}
-              </TableCell>
+              <TableCell className="border-r select-text">{filename}</TableCell>
               <TableCell>
-                <StringDiff styles={diffStyle} oldValue={filename} newValue={newFilenames[index]} />
+                {showDiff ? (
+                  <StringDiff
+                    styles={diffStyle}
+                    oldValue={filename}
+                    newValue={newFilenames[index]}
+                  />
+                ) : (
+                  newFilenames[index]
+                )}
               </TableCell>
             </TableRow>
           ))}
