@@ -54,6 +54,14 @@ export function ActionCommandMenu() {
     if (!open) setTimeout(() => setPage("root"), 200);
   };
 
+  const onEscapeKeyDown = (e: KeyboardEvent) => {
+    if (e.key === "Escape" && page !== "root") {
+      e.stopPropagation();
+      e.preventDefault();
+      setPage("root");
+    }
+  };
+
   return (
     <>
       <Button
@@ -87,10 +95,14 @@ export function ActionCommandMenu() {
         )}
       </Button>
 
-      <CommandDialog open={open} onOpenChange={handleOpenChange}>
+      <CommandDialog
+        open={open}
+        onOpenChange={handleOpenChange}
+        onEscapeKeyDown={onEscapeKeyDown}
+      >
         {page === "root" && (
           <>
-            <CommandInput placeholder="Type an action or search..." />
+            <CommandInput autoFocus placeholder="Type an action or search..." />
             <CommandList>
               <CommandEmpty>No actions found.</CommandEmpty>
               <CommandGroup heading="Basic">
@@ -195,8 +207,9 @@ export function ActionCommandMenu() {
                 </CommandItem>
                 <CommandItem
                   onSelect={() => {
-                    setPage("numbering")
-                  }}>
+                    setPage("numbering");
+                  }}
+                >
                   <Asterisk className="mr-2 h-4 w-4" />
                   <span>Numbering</span>
                 </CommandItem>
@@ -258,7 +271,9 @@ export function ActionCommandMenu() {
 
         {page === "regex" && <RegexMenu handleOpenChange={handleOpenChange} />}
 
-        {page === "numbering" && <NumberingMenu handleOpenChange={handleOpenChange} />}
+        {page === "numbering" && (
+          <NumberingMenu handleOpenChange={handleOpenChange} />
+        )}
       </CommandDialog>
     </>
   );
