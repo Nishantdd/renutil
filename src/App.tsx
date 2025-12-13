@@ -11,10 +11,8 @@ export default function App() {
       <div className="bg-secondary border-b border-r border-border">
         <FolderInput />
       </div>
-      <div className="flex bg-secondary items-center justify-between border-b border-border">
-        <div>
-          <DiffToggle />
-        </div>
+      <div className="flex bg-secondary items-center justify-end border-b border-border">
+        <DiffToggle />
         <ThemeToggle />
       </div>
       <div className="flex flex-col bg-card border-b-0 border-r border-border">

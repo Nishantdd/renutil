@@ -132,52 +132,54 @@ export default function DiffVisualizer() {
         </Table>
       </div>
 
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-30">
-        <div className="flex items-center gap-4 rounded-md border p-2 bg-card">
-          <Select
-            value={pageSize.toString()}
-            onValueChange={(val) => {
-              setPageSize(Number(val));
-              setPage(1);
-            }}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder={pageSize} />
-            </SelectTrigger>
-            <SelectContent side="top">
-              {[10, 20, 50, 100].map((size) => (
-                <SelectItem key={size} value={`${size}`}>
-                  {size}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <div className="w-[1px] h-4 bg-border" />
-          <div className="flex items-center gap-2">
-            <div className="text-sm font-medium">
-              Page {page} of {totalPages}
-            </div>
-            <div className="flex items-center gap-1">
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={() => setPage((p) => Math.max(1, p - 1))}
-                disabled={page === 1}
-              >
-                <ChevronLeft size={4} />
-              </Button>
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                disabled={page === totalPages}
-              >
-                <ChevronRight size={4} />
-              </Button>
+      {oldFilenames.length && (
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-30">
+          <div className="flex items-center gap-4 rounded-md border p-2 bg-card">
+            <Select
+              value={pageSize.toString()}
+              onValueChange={(val) => {
+                setPageSize(Number(val));
+                setPage(1);
+              }}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder={pageSize} />
+              </SelectTrigger>
+              <SelectContent side="top">
+                {[10, 20, 50, 100].map((size) => (
+                  <SelectItem key={size} value={`${size}`}>
+                    {size}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <div className="w-[1px] h-4 bg-border" />
+            <div className="flex items-center gap-2">
+              <div className="text-sm font-medium">
+                Page {page} of {totalPages}
+              </div>
+              <div className="flex items-center gap-1">
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => setPage((p) => Math.max(1, p - 1))}
+                  disabled={page === 1}
+                >
+                  <ChevronLeft size={4} />
+                </Button>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                  disabled={page === totalPages}
+                >
+                  <ChevronRight size={4} />
+                </Button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
