@@ -1,12 +1,12 @@
-name: 'build'
+name: "build"
 
 on:
   workflow_dispatch:
   push:
     tags:
-      - 'v*' 
+      - "v*"
     branches:
-      - release
+      - main
 
 jobs:
   publish-tauri:
@@ -16,14 +16,25 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - platform: 'macos-latest' # for Arm based macs (M1 and above).
-            args: '--target aarch64-apple-darwin'
-          - platform: 'macos-latest' # for Intel based macs.
-            args: '--target x86_64-apple-darwin'
-          - platform: 'ubuntu-22.04'
-            args: ''
-          - platform: 'windows-latest'
-            args: ''
+          - platform: macos-latest
+            args: "--target aarch64-apple-darwin"
+            rust_targets: "aarch64-apple-darwin"
+            label: "macos-arm64"
+
+          - platform: macos-latest
+            args: "--target x86_64-apple-darwin"
+            rust_targets: "x86_64-apple-darwin"
+            label: "macos-intel"
+
+          - platform: windows-latest
+            args: ""
+            rust_targets: ""
+            label: "windows-x64"
+
+          - platform: ubuntu-22.04
+            args: ""
+            rust_targets: ""
+            label: "linux-x64"
 
     runs-on: ${{ matrix.platform }}
     steps:
@@ -39,23 +50,23 @@ jobs:
         uses: pnpm/action-setup@v3
         with:
           version: latest
-        
+
       - name: setup node
         uses: actions/setup-node@v4
         with:
           node-version: lts/*
-          cache: 'pnpm' # Set this to npm, yarn or pnpm.
+          cache: "pnpm" # Set this to npm, yarn or pnpm.
 
       - name: install Rust stable
         uses: dtolnay/rust-toolchain@stable # Set this to dtolnay/rust-toolchain@nightly
         with:
           # Those targets are only used on macos runners so it's in an `if` to slightly speed up windows and linux builds.
-          targets: ${{ matrix.platform == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
+          targets: ${{ matrix.rust_targets }}
 
       - name: Rust cache
         uses: swatinem/rust-cache@v2
         with:
-          workspaces: './src-tauri -> target'
+          workspaces: "./src-tauri -> target"
 
       - name: install frontend dependencies
         # If you don't have `beforeBuildCommand` configured you may want to build your frontend here too.
@@ -66,8 +77,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tagName: v__VERSION__ # the action automatically replaces \_\_VERSION\_\_ with the app version.
-          releaseName: 'Renutil v__VERSION__'
-          releaseBody: 'See the assets to download this version and install.'
+          releaseName: "Renutil v__VERSION__"
+          releaseBody: "See the assets to download this version and install."
           releaseDraft: true
           prerelease: false
           args: ${{ matrix.args }}
