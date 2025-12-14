@@ -6,13 +6,13 @@ export function DiffToggle() {
   const toggleShowDiff = useOptionStore((s) => s.toggleShowDiff);
   return (
     <Button
-      variant="link"
+      variant="ghost"
       size="icon"
-      className="active:scale-90"
+      className="border-l group"
       onClick={toggleShowDiff}
       aria-label="Toggle diff"
     >
-      <Diff />
+      <Diff className="group-active:scale-90" />
     </Button>
   );
 }

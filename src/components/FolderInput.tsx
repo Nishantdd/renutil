@@ -13,9 +13,10 @@ import { useRenameStore } from "@/store/renameStore";
 import { invoke } from "@tauri-apps/api/core";
 
 export default function FolderInput() {
-  const [folderPath, setFolderPath] = useState("");
   const [loading, setLoading] = useState(false);
   const setOriginalFiles = useRenameStore((s) => s.setOriginalFiles);
+  const folderPath = useRenameStore(s => s.folderPath);
+  const setFolderPath = useRenameStore(s => s.setFolderPath);
 
   useEffect(() => {
     const down = async (e: KeyboardEvent) => {
@@ -73,12 +74,12 @@ export default function FolderInput() {
       </TooltipProvider>
       <Button
         type="button"
-        size="icon"
         variant="ghost"
+        className="border-l"
         disabled={loading}
         onClick={handleOpenFolder}
       >
-        <FolderOpen />
+        <FolderOpen /> Open
       </Button>
     </div>
   );

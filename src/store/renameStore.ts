@@ -5,11 +5,13 @@ import { applyAction } from "@/lib/transforms";
 type CacheMap = Map<number, string[]>;
 
 interface RenameState {
+  folderPath: string;
   originalFiles: string[];
   actions: RenameAction[];
   cache: CacheMap;
 
   // actions
+  setFolderPath: (path: string) => void;
   setOriginalFiles: (files: string[]) => void;
   addAction: (action: RenameAction) => void;
   insertActionAt: (index: number, action: RenameAction) => void;
@@ -30,9 +32,12 @@ export const useRenameStore = create<RenameState>((set, get) => {
   };
 
   return {
+    folderPath: "",
     originalFiles: [],
     actions: [],
     cache: createCacheWithOrigin([]),
+
+    setFolderPath: (path) => set(() => ({ folderPath: path })),
 
     setOriginalFiles: (files) =>
       set(() => {
