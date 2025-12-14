@@ -127,6 +127,21 @@
     @apply select-none border-border outline-ring/50;
   }
 
+  html,
+  body {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-muted) var(--color-background);
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
   ::selection {
     background: var(--color-primary);
     color: var(--color-primary-foreground);
@@ -162,11 +177,6 @@
     border-radius: var(--radius-md);
   }
 
-  html {
-    scrollbar-width: thin;
-    scrollbar-color: var(--color-muted) var(--color-background);
-  }
-
   :root {
     font-family:
       Geist,
@@ -188,10 +198,6 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     -webkit-text-size-adjust: 100%;
-  }
-
-  body {
-    @apply bg-background text-foreground;
   }
 
   button,
