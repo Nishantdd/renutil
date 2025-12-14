@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { FolderOpen } from "lucide-react";
+import { FolderOpen, Loader2 } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -79,7 +79,7 @@ export default function FolderInput() {
         disabled={loading}
         onClick={handleOpenFolder}
       >
-        <FolderOpen /> Open
+        {loading ? <Loader2 className="animate-spin" /> : <FolderOpen />} Open
       </Button>
     </div>
   );
