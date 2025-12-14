@@ -12,7 +12,7 @@
   "app": {
     "windows": [
       {
-        "title": "renutil",
+        "title": "Renutil",
         "minHeight": 580,
         "minWidth": 860,
         "width": 860,
