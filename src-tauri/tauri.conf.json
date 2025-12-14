@@ -1,6 +1,6 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "renutil",
+  "productName": "Renutil",
   "version": "0.1.0",
   "identifier": "com.renutil.app",
   "build": {
