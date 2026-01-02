@@ -177,6 +177,10 @@
     border-radius: var(--radius-md);
   }
 
+  ::-webkit-scrollbar-corner {
+      background: var(--color-background);
+  }
+
   :root {
     font-family:
       Geist,
