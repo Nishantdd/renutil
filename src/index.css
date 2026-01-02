@@ -43,6 +43,7 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
+  --color-selection-background: var(--selection-background);
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -80,6 +81,7 @@
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
+  --selection-background: oklch(0.8459 0.0808 247.16);
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.141 0.005 285.823);
   --sidebar-primary: oklch(0.21 0.006 285.885);
@@ -117,6 +119,7 @@
   --chart-4: oklch(0.62 0.26 300);
   --chart-5: oklch(0.65 0.25 20);
   --sidebar: oklch(0.24 0.003 285);
+  --selection-background: oklch(0.8459 0.0808 247.16);
   --sidebar-foreground: oklch(0.97 0.01 285);
   --sidebar-primary: oklch(0.52 0.23 260);
   --sidebar-primary-foreground: oklch(0.97 0.01 285);
@@ -125,7 +128,7 @@
   --sidebar-border: oklch(0.97 0.01 285 / 10%);
   --sidebar-ring: oklch(0.55 0.015 285);
   --diff-add: oklch(0.55 0.16 142);
-  --diff-remove: oklch(0.50 0.20 29);
+  --diff-remove: oklch(0.5 0.2 29);
 }
 
 @layer base {
@@ -149,14 +152,14 @@
   }
 
   ::selection {
-    background: var(--color-primary);
-    color: var(--color-primary-foreground);
+    background: var(--color-selection-background);
+    color: var(--color-primary);
     text-shadow: none;
   }
 
   ::-moz-selection {
-    background: var(--color-primary);
-    color: var(--color-primary-foreground);
+    background: var(--color-selection-background);
+    color: var(--color-primary);
     text-shadow: none;
   }
 
@@ -184,7 +187,7 @@
   }
 
   ::-webkit-scrollbar-corner {
-      background: var(--color-background);
+    background: var(--color-background);
   }
 
   :root {
@@ -201,8 +204,8 @@
       "Open Sans",
       "Helvetica Neue",
       sans-serif;
-    line-height: 24px;
 
+    line-height: 24px;
     font-synthesis: none;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;

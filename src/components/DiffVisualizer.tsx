@@ -117,7 +117,7 @@ export default function DiffVisualizer({ className }: { className: string }) {
                   <TableCell className="font-medium border-r">
                     {globalIndex + 1}
                   </TableCell>
-                  <TableCell className="border-r select-text">
+                  <TableCell selectable className="border-r">
                     {filename}
                   </TableCell>
                   <TableCell>

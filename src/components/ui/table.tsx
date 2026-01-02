@@ -76,7 +76,9 @@ function TableHead({ className, ...props }: React.ComponentProps<"th">) {
   )
 }
 
-function TableCell({ className, ...props }: React.ComponentProps<"td">) {
+function TableCell({ className, selectable, children, ...props }: React.ComponentProps<"td"> & {
+  selectable?: boolean;
+}) {
   return (
     <td
       data-slot="table-cell"
@@ -85,7 +87,12 @@ function TableCell({ className, ...props }: React.ComponentProps<"td">) {
         className
       )}
       {...props}
-    />
+    >
+      {selectable
+        ? <span className="select-text inline-flex">{children}</span>
+        : children
+      }
+    </td>
   )
 }
 
