@@ -7,12 +7,14 @@ import { DiffToggle } from "./components/options/DiffToggle";
 import SaveButton from "./components/SaveButton";
 import { useEffect } from "react";
 import { getCurrentWindow } from "@tauri-apps/api/window";
+import { useRenameStore } from "./store/renameStore";
 
 export default function App() {
+  const folderPath = useRenameStore((s) => s.folderPath);
   useEffect(() => {
     getCurrentWindow().show();
   }, []);
- 
+
   return (
     <div className="grid grid-cols-[minmax(280px,1fr)_4fr] grid-rows-[auto_1fr] h-screen w-screen">
       <div className="bg-secondary border-b border-r border-border">
@@ -23,11 +25,13 @@ export default function App() {
         <ThemeToggle />
         <SaveButton />
       </div>
-      <div className="flex flex-col bg-card border-b-0 border-r border-border">
-        <ActionCommandMenu />
-        <ActionCards />
-      </div>
-      <DiffVisualizer />
+      {folderPath && (
+        <div className="flex flex-col bg-card border-b-0 border-r border-border">
+          <ActionCommandMenu />
+          <ActionCards />
+        </div>
+      )}
+      <DiffVisualizer className={!folderPath ? "col-span-2" : ""} />
     </div>
   );
 }
