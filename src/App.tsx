@@ -5,8 +5,14 @@ import { ActionCommandMenu } from "./components/ActionCommandsMenu";
 import ActionCards from "./components/ActionCards";
 import { DiffToggle } from "./components/options/DiffToggle";
 import SaveButton from "./components/SaveButton";
+import { useEffect } from "react";
+import { getCurrentWindow } from "@tauri-apps/api/window";
 
 export default function App() {
+  useEffect(() => {
+    getCurrentWindow().show();
+  }, []);
+ 
   return (
     <div className="grid grid-cols-[minmax(280px,1fr)_4fr] grid-rows-[auto_1fr] h-screen w-screen">
       <div className="bg-secondary border-b border-r border-border">
