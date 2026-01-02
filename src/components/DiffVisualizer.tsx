@@ -139,8 +139,8 @@ export default function DiffVisualizer({ className }: { className: string }) {
       </div>
 
       {oldFilenames.length && (
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-30">
-          <div className="flex items-center gap-4 rounded-md border p-2 bg-card">
+        <div className="absolute flex justify-center w-full z-30 bottom-4 px-4">
+          <div className="flex items-center gap-4 rounded-md border p-2 bg-card w-max max-w-full">
             <Select
               value={pageSize.toString()}
               onValueChange={(val) => {
@@ -159,9 +159,9 @@ export default function DiffVisualizer({ className }: { className: string }) {
                 ))}
               </SelectContent>
             </Select>
-            <div className="w-[1px] h-4 bg-border" />
-            <div className="flex items-center gap-2">
-              <div className="text-sm font-medium">
+            <div className="w-[1px] h-4 bg-border flex-shrink-0" />
+            <div className="flex items-center gap-2 min-w-0">
+              <div className="text-sm font-medium truncate max-w-full">
                 Page {page} of {totalPages}
               </div>
               <div className="flex items-center gap-1">
