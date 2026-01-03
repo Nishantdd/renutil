@@ -45,7 +45,7 @@ export default function Layout({ sidebar, main, showSidebar }: LayoutProps) {
     <div className="flex flex-1 overflow-hidden">
       <div
         style={{ width: `clamp(280px, ${width}px, 25vw)` }}
-        className="shrink-0 flex flex-col bg-card border-r border-border"
+        className="shrink-0 flex flex-col bg-card"
       >
         {sidebar}
       </div>
