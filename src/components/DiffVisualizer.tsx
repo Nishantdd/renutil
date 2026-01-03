@@ -21,7 +21,6 @@ import { type } from "@tauri-apps/plugin-os";
 import { Kbd, KbdGroup } from "./ui/kbd";
 import { useOptionStore } from "@/store/optionStore";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 type DiffStyles = {
   added: React.CSSProperties;
@@ -39,7 +38,7 @@ const diffStyle: DiffStyles = {
   default: {},
 };
 
-export default function DiffVisualizer({ className }: { className: string }) {
+export default function DiffVisualizer() {
   const osType = type();
   const showDiff = useOptionStore((s) => s.showDiff);
   const oldFilenames = useRenameStore((s) => s.originalFiles);
@@ -61,12 +60,7 @@ export default function DiffVisualizer({ className }: { className: string }) {
 
   if (!oldFilenames.length) {
     return (
-      <div
-        className={cn(
-          "min-h-[100%] min-w-[100%] rounded-lg flex flex-col gap-2 items-center justify-center",
-          className,
-        )}
-      >
+      <div className="min-h-[100%] min-w-[100%] rounded-lg flex flex-col col-span-2 gap-2 items-center justify-center">
         Please select a directory
         {osType === "macos" && (
           <div className="flex">
