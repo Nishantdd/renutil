@@ -15,6 +15,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { StringDiff } from "react-string-diff";
 import { useRenameStore } from "@/store/renameStore";
 import { type } from "@tauri-apps/plugin-os";
@@ -55,6 +56,16 @@ export default function DiffVisualizer() {
   const totalPages = Math.ceil(totalItems / pageSize);
   const startIndex = (page - 1) * pageSize;
   const endIndex = Math.min(startIndex + pageSize, totalItems);
+
+  const handlePageInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    if (val === "") return;
+    const num = parseInt(val);
+    if (!isNaN(num)) {
+      const clamped = Math.max(1, Math.min(totalPages, num));
+      setPage(clamped);
+    }
+  };
 
   const currentOldFiles = oldFilenames.slice(startIndex, endIndex);
 
@@ -132,9 +143,9 @@ export default function DiffVisualizer() {
         </Table>
       </div>
 
-      {oldFilenames.length && (
+      {oldFilenames.length > 0 && (
         <div className="absolute flex justify-center w-full z-30 bottom-4 px-4">
-          <div className="flex items-center gap-4 rounded-md border p-2 bg-card w-max max-w-full">
+          <div className="flex items-center gap-4 rounded-md border p-2 bg-card w-max max-w-full shadow-sm">
             <Select
               value={pageSize.toString()}
               onValueChange={(val) => {
@@ -142,7 +153,7 @@ export default function DiffVisualizer() {
                 setPage(1);
               }}
             >
-              <SelectTrigger>
+              <SelectTrigger className="h-8 w-[70px]">
                 <SelectValue placeholder={pageSize} />
               </SelectTrigger>
               <SelectContent side="top">
@@ -153,29 +164,41 @@ export default function DiffVisualizer() {
                 ))}
               </SelectContent>
             </Select>
+
             <div className="w-[1px] h-4 bg-border flex-shrink-0" />
-            <div className="flex items-center gap-2 min-w-0">
-              <div className="text-sm font-medium truncate max-w-full">
-                Page {page} of {totalPages}
+
+            <div className="flex items-center gap-1">
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-8 w-8"
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
+                disabled={page === 1}
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+
+              <div className="flex items-center gap-1 px-2">
+                <Input
+                  type="number"
+                  value={page}
+                  onChange={handlePageInputChange}
+                  className="max-w-10 h-8 rounded-none border-0 border-b border-input !bg-transparent px-0 text-center shadow-none focus-visible:ring-0 focus-visible:border-primary"
+                />
+                <span className="text-sm font-medium text-muted-foreground select-none">
+                  / {totalPages}
+                </span>
               </div>
-              <div className="flex items-center gap-1">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => setPage((p) => Math.max(1, p - 1))}
-                  disabled={page === 1}
-                >
-                  <ChevronLeft size={4} />
-                </Button>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                  disabled={page === totalPages}
-                >
-                  <ChevronRight size={4} />
-                </Button>
-              </div>
+
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-8 w-8"
+                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                disabled={page === totalPages}
+              >
+                <ChevronRight className="h-4 w-4" />
+              </Button>
             </div>
           </div>
         </div>
