@@ -8,7 +8,7 @@ export default function Header() {
   const folderPath = useRenameStore((s) => s.folderPath);
   return (
     <div className="flex col-span-2 bg-secondary items-center justify-between border-b border-border">
-      <div className="pl-2 truncate">{folderPath}</div>
+      <div className="pl-2 truncate text-sm">{folderPath}</div>
       <div className="flex">
         <DiffToggle />
         <ThemeToggle />
