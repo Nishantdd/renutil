@@ -1,35 +1,45 @@
+
 import { Monitor, Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useTheme } from "@/components/ui/ThemeProvider";
+import { Theme } from "@/types/theme.types";
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme();
 
-  const toggleTheme = () => {
-    if (theme === 'light') setTheme('system');
-    if (theme === 'system') setTheme('dark');
-    if (theme === 'dark') setTheme('light');
-  };
+  const themeOptions = [
+    { value: "light", label: "Light", icon: Sun },
+    { value: "dark", label: "Dark", icon: Moon },
+    { value: "system", label: "System", icon: Monitor },
+  ];
+
+  const CurrentIcon = themeOptions.find((opt) => opt.value === theme)?.icon || Sun;
 
   return (
-    <Button
-      variant="ghost"
-      size="icon"
-      onClick={toggleTheme}
-      className="border-l"
-      aria-label="Toggle theme"
-    >
-      <Sun
-        className={`h-[1.2rem] w-[1.2rem] transition-all ${theme === "light" ? "rotate-0 scale-100" : "rotate-90 scale-0"}`}
-      />
-
-      <Moon
-        className={`absolute h-[1.2rem] w-[1.2rem] transition-all ${theme === "dark" ? "rotate-0 scale-100" : "-rotate-90 scale-0"}`}
-      />
-
-      <Monitor
-        className={`absolute h-[1.2rem] w-[1.2rem] transition-all ${theme === "system" ? "rotate-0 scale-100" : "scale-0"}`}
-      />
-    </Button>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="border-l"
+          aria-label="Toggle theme"
+        >
+          <CurrentIcon />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        {themeOptions.map((option) => (
+          <DropdownMenuItem
+            key={option.value}
+            onClick={() => setTheme(option.value as Theme)}
+            className={theme === option.value ? "font-semibold" : ""}
+          >
+            <option.icon className="mr-2 h-4 w-4" />
+            {option.label}
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
