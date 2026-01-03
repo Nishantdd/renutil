@@ -18,7 +18,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { StringDiff } from "react-string-diff";
 import { useRenameStore } from "@/store/renameStore";
-import { type } from "@tauri-apps/plugin-os";
 import { Kbd, KbdGroup } from "./ui/kbd";
 import { useOptionStore } from "@/store/optionStore";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -40,7 +39,7 @@ const diffStyle: DiffStyles = {
 };
 
 export default function DiffVisualizer() {
-  const osType = type();
+  const osType = useOptionStore((s) => s.osType);
   const showDiff = useOptionStore((s) => s.showDiff);
   const oldFilenames = useRenameStore((s) => s.originalFiles);
   const newFilenames = useRenameStore((s) => {

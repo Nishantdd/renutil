@@ -3,7 +3,7 @@ import { open } from "@tauri-apps/plugin-dialog";
 import { useEffect, useState } from "react";
 import { useRenameStore } from "@/store/renameStore";
 import { invoke } from "@tauri-apps/api/core";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 
 export default function OpenButton() {
   const [loading, setLoading] = useState(false);

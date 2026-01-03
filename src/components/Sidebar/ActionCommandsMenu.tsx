@@ -13,7 +13,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Kbd, KbdGroup } from "@/components/ui/kbd";
 
-import { type } from "@tauri-apps/plugin-os";
 import { useShallow } from "zustand/react/shallow";
 import { useCommandStore } from "@/store/commandStore";
 import AddPrefixMenu from "../menus/AddPrefixMenu";
@@ -25,9 +24,10 @@ import RemoveAtPositionMenu from "../menus/RemoveAtPositionMenu";
 import RemoveCustomCharactersMenu from "../menus/RemoveCustomCharacterMenu";
 import RegexMenu from "../menus/RegexMenu";
 import NumberingMenu from "../menus/NumberingMenu";
+import { useOptionStore } from "@/store/optionStore";
 
 export function ActionCommandMenu() {
-  const osType = type();
+  const osType = useOptionStore((s) => s.osType);
   const { open, setOpen, page, setPage } = useCommandStore(
     useShallow((s) => ({
       open: s.open,
