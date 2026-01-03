@@ -1,22 +1,14 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { FolderOpen, Loader2 } from "lucide-react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { open } from "@tauri-apps/plugin-dialog";
 import { useEffect, useState } from "react";
 import { useRenameStore } from "@/store/renameStore";
 import { invoke } from "@tauri-apps/api/core";
+import { Button } from "../ui/button";
 
-export default function FolderInput() {
+export default function OpenButton() {
   const [loading, setLoading] = useState(false);
   const setOriginalFiles = useRenameStore((s) => s.setOriginalFiles);
-  const folderPath = useRenameStore(s => s.folderPath);
-  const setFolderPath = useRenameStore(s => s.setFolderPath);
+  const setFolderPath = useRenameStore((s) => s.setFolderPath);
 
   useEffect(() => {
     const down = async (e: KeyboardEvent) => {
@@ -53,34 +45,14 @@ export default function FolderInput() {
   };
 
   return (
-    <div className="flex w-full items-center">
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Input
-              type="text"
-              placeholder="Folder path"
-              className="border-none"
-              value={folderPath}
-              readOnly
-            />
-          </TooltipTrigger>
-          {folderPath && (
-            <TooltipContent>
-              <p>{folderPath}</p>
-            </TooltipContent>
-          )}
-        </Tooltip>
-      </TooltipProvider>
-      <Button
-        type="button"
-        variant="ghost"
-        className="border-l"
-        disabled={loading}
-        onClick={handleOpenFolder}
-      >
-        {loading ? <Loader2 className="animate-spin" /> : <FolderOpen />} Open
-      </Button>
-    </div>
+    <Button
+      type="button"
+      variant="ghost"
+      className="border-l"
+      disabled={loading}
+      onClick={handleOpenFolder}
+    >
+      {loading ? <Loader2 className="animate-spin" /> : <FolderOpen />} Open
+    </Button>
   );
 }

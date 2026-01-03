@@ -1,5 +1,5 @@
 import { Loader2, Save } from "lucide-react";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { useRenameStore } from "@/store/renameStore";
 import { useState } from "react";
 import { invoke } from "@tauri-apps/api/core";
