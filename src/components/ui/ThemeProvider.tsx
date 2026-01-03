@@ -1,5 +1,6 @@
 import { Theme, ThemeProviderState } from "@/types/theme.types"
-import { createContext, useContext, useEffect, useState } from "react"
+import { getCurrentWindow } from "@tauri-apps/api/window"
+import { createContext, useContext, useEffect, useReducer } from "react"
 
 type ThemeProviderProps = {
   children: React.ReactNode
@@ -20,38 +21,43 @@ export function ThemeProvider({
   storageKey = "ui-theme",
   ...props
 }: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme>(() => {
-    const localTheme = localStorage.getItem(storageKey) as Theme;
-    return localTheme || defaultTheme;
-  })
+  const [theme, setTheme] = useReducer(
+    (_: Theme, next: Theme) => {
+      localStorage.setItem(storageKey, next)
+      return next;
+    },
+    (localStorage.getItem(storageKey) as Theme) || defaultTheme
+  );
 
   useEffect(() => {
-    const root = window.document.documentElement
-    root.classList.remove("light", "dark")
+    let unlisten: (() => void) | undefined;
 
-    if (theme === "system") {
-      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
-        .matches
-        ? "dark"
-        : "light"
+    (async () => {
+      unlisten = await getCurrentWindow().onThemeChanged(({ payload }) => {
+        if (theme !== "system") return;
+        const root = document.documentElement;
+        root.classList.remove("light", "dark");
+        root.classList.add(payload);
+      });
+    })();
 
-      root.classList.add(systemTheme)
-      return
-    }
+    return () => {
+      unlisten?.();
+    };
+  }, []);
 
-    root.classList.add(theme)
-  }, [theme])
-
-  const value = {
-    theme,
-    setTheme: (theme: Theme) => {
-      localStorage.setItem(storageKey, theme)
-      setTheme(theme)
-    },
-  }
+  useEffect(() => {
+    const root = document.documentElement;
+    root.classList.remove("light", "dark");
+    (async () => {
+      if (theme !== "system") return root.classList.add(theme);
+      const systemTheme = (await getCurrentWindow().theme()) ?? "dark";
+      root.classList.add(systemTheme);
+    })();
+  }, [theme]);
 
   return (
-    <ThemeProviderContext.Provider {...props} value={value}>
+    <ThemeProviderContext.Provider {...props} value={{ theme, setTheme }}>
       {children}
     </ThemeProviderContext.Provider>
   )
