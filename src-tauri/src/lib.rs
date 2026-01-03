@@ -34,49 +34,47 @@ fn get_directory_contents(dir_path: &str) -> Result<Vec<String>, String> {
 }
 
 #[tauri::command]
-fn save_directory_contents(dir_path: &str, changes: Vec<Content>) -> Result<Vec<String>, String> {
+fn save_directory_contents(
+    dir_path: &str,
+    old_names: Vec<String>,
+    new_names: Vec<String>,
+) -> Result<Vec<String>, String> {
+    use std::fs::rename;
+    use std::path::Path;
+
     let path = Path::new(dir_path);
-
-    if !path.exists() {
-        return Err(format!("The path '{}' does not exist.", dir_path));
-    } else if !path.is_dir() {
-        return Err(format!("The path '{}' is not a directory.", dir_path));
-    }
-
-    for change in changes {
-        if change.old == change.new {
-            continue;
-        }
-
-        let old_path = path.join(&change.old);
-        let new_path = path.join(&change.new);
-
-        if !old_path.exists() {
-            return Err(format!(
-                "File '{}' does not exist in directory '{}'.",
-                change.old, dir_path
-            ));
-        } else if !old_path.is_file() {
-            return Err(format!("'{}' is not a file.", change.old));
-        } else if new_path.exists() {
-            return Err(format!(
-                "Cannot rename '{}' to '{}': destination file already exists.",
-                change.old, change.new
-            ));
-        }
-
-        rename(&old_path, &new_path).map_err(|e| {
-            format!(
-                "Failed to rename '{}' to '{}': {}",
-                change.old, change.new, e
-            )
+    match (path.exists(), path.is_dir()) {
+        (false, _) => Err(format!("The path '{}' does not exist.", dir_path)),
+        (_, false) => Err(format!("The path '{}' is not a directory.", dir_path)),
+        _ => Ok(()),
+    }?;
+    
+    old_names
+        .into_iter()
+        .zip(new_names)
+        .try_for_each(|(old, new)| match old == new {
+            true => Ok(()),
+            false => {
+                let old_path = path.join(&old);
+                let new_path = path.join(&new);
+                match (old_path.exists(), old_path.is_file(), new_path.exists()) {
+                    (false, _, _) => Err(format!(
+                        "File '{}' does not exist in directory '{}'.",
+                        old, dir_path
+                    )),
+                    (_, false, _) => Err(format!("'{}' is not a file.", old)),
+                    (_, _, true) => Err(format!(
+                        "Cannot rename '{}' to '{}': destination file already exists.",
+                        old, new
+                    )),
+                    _ => rename(&old_path, &new_path)
+                        .map_err(|e| format!("Failed to rename '{}' to '{}': {}", old, new, e)),
+                }
+            }
         })?;
-    }
-
-    match get_directory_contents(dir_path) {
-        Ok(v) => Ok(v),
-        Err(e) => Err(format!("Failed to retrieve files after changes: {}", e)),
-    }
+    
+    get_directory_contents(dir_path)
+        .map_err(|e| format!("Failed to retrieve files after changes: {}", e))
 }
 
 #[tauri::command]
