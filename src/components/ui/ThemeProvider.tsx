@@ -30,31 +30,24 @@ export function ThemeProvider({
   );
 
   useEffect(() => {
-    let unlisten: (() => void) | undefined;
-
-    (async () => {
-      unlisten = await getCurrentWindow().onThemeChanged(({ payload }) => {
-        if (theme !== "system") return;
-        const root = document.documentElement;
-        root.classList.remove("light", "dark");
-        root.classList.add(payload);
-      });
-    })();
-
-    return () => {
-      unlisten?.();
-    };
-  }, []);
-
-  useEffect(() => {
     const root = document.documentElement;
     root.classList.remove("light", "dark");
+    let unlisten: (() => void) | undefined;
+
     (async () => {
       if (theme !== "system") return root.classList.add(theme);
       const systemTheme = (await getCurrentWindow().theme()) ?? "dark";
       root.classList.add(systemTheme);
+
+      unlisten = await getCurrentWindow().onThemeChanged(({ payload }) => {
+        root.classList.remove("light", "dark");
+        root.classList.add(payload ?? "dark");
+      });
     })();
+
+    return () => unlisten?.();
   }, [theme]);
+
 
   return (
     <ThemeProviderContext.Provider {...props} value={{ theme, setTheme }}>
