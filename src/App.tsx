@@ -1,33 +1,26 @@
-import DiffVisualizer from "./components/DiffVisualizer";
-import { ActionCommandMenu } from "./components/ActionCommandsMenu";
-import ActionCards from "./components/ActionCards";
 import { useEffect } from "react";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { useRenameStore } from "./store/renameStore";
 import Header from "./components/Header";
-import { cn } from "./lib/utils";
+import DiffVisualizer from "./components/DiffVisualizer";
+import Layout from "./components/Layout";
+import Sidebar from "./components/Sidebar/Sidebar";
 
 export default function App() {
   const folderPath = useRenameStore((s) => s.folderPath);
+
   useEffect(() => {
     getCurrentWindow().show();
   }, []);
 
   return (
-    <div className="grid grid-cols-[minmax(280px,1fr)_4fr] grid-rows-[auto_1fr] h-screen w-screen">
+    <div className="flex flex-col h-screen w-screen overflow-hidden bg-background">
       <Header />
-
-      <div
-        className={cn(
-          "flex flex-col bg-card border-b-0 border-r border-border",
-          !folderPath && "hidden",
-        )}
-      >
-        <ActionCommandMenu />
-        <ActionCards />
-      </div>
-
-      <DiffVisualizer />
+      <Layout
+        showSidebar={!!folderPath}
+        sidebar={<Sidebar />}
+        main={<DiffVisualizer />}
+      />
     </div>
   );
 }

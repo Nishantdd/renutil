@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Plus, Minus, Regex, Asterisk, Replace } from "lucide-react"; // Added ArrowLeft
+import { Plus, Minus, Regex, Asterisk, Replace } from "lucide-react";
 
 import {
   CommandDialog,
@@ -16,15 +16,15 @@ import { Kbd, KbdGroup } from "@/components/ui/kbd";
 import { type } from "@tauri-apps/plugin-os";
 import { useShallow } from "zustand/react/shallow";
 import { useCommandStore } from "@/store/commandStore";
-import AddPrefixMenu from "./menus/AddPrefixMenu";
-import ReplaceMenu from "./menus/ReplaceMenu";
-import AddSuffixMenu from "./menus/AddSuffixMenu";
-import AddAtPositionMenu from "./menus/AddAtPositionMenu";
-import CountableRemoveMenu from "./menus/CountableRemoveMenu";
-import RemoveAtPositionMenu from "./menus/RemoveAtPositionMenu";
-import RemoveCustomCharactersMenu from "./menus/RemoveCustomCharacterMenu";
-import RegexMenu from "./menus/RegexMenu";
-import NumberingMenu from "./menus/NumberingMenu";
+import AddPrefixMenu from "../menus/AddPrefixMenu";
+import ReplaceMenu from "../menus/ReplaceMenu";
+import AddSuffixMenu from "../menus/AddSuffixMenu";
+import AddAtPositionMenu from "../menus/AddAtPositionMenu";
+import CountableRemoveMenu from "../menus/CountableRemoveMenu";
+import RemoveAtPositionMenu from "../menus/RemoveAtPositionMenu";
+import RemoveCustomCharactersMenu from "../menus/RemoveCustomCharacterMenu";
+import RegexMenu from "../menus/RegexMenu";
+import NumberingMenu from "../menus/NumberingMenu";
 
 export function ActionCommandMenu() {
   const osType = type();

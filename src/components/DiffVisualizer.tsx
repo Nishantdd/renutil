@@ -60,7 +60,7 @@ export default function DiffVisualizer() {
 
   if (!oldFilenames.length) {
     return (
-      <div className="min-h-[100%] min-w-[100%] rounded-lg flex flex-col col-span-2 gap-2 items-center justify-center">
+      <div className="min-h-[100%] min-w-[100%] rounded-lg flex flex-col gap-2 items-center justify-center">
         Please select a directory
         {osType === "macos" && (
           <div className="flex">
