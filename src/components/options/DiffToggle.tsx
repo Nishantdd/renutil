@@ -3,10 +3,13 @@ import { Diff } from "lucide-react";
 import { Toggle } from "../ui/toggle";
 
 export function DiffToggle() {
+  const showDiff = useOptionStore((s) => s.showDiff);
   const toggleShowDiff = useOptionStore((s) => s.toggleShowDiff);
+
   return (
     <Toggle
       className="border-l group"
+      pressed={showDiff}
       onClick={toggleShowDiff}
       aria-label="Toggle diff"
     >
