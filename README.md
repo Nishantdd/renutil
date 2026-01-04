@@ -6,7 +6,7 @@ Renutil is a lightweight desktop application for renaming in bulk.
 
 ## Preview
 
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/33397154-55ef-4b8a-bcd3-3ec730bb29d3" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/b1e25028-e3ac-4952-8e3d-96d842478f38" />
 
 ---
 
